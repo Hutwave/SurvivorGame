@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{D7F4FB05-F547-E8F0-5911-1A7BE02F7430}</ProjectGuid>
+    <ProjectGuid>{C547F864-9AB4-2227-15DD-298BD2410006}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Cinemachine</AssemblyName>
@@ -803,11 +803,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Unity.Timeline.csproj">
-      <Project>{00F7DF33-B7B6-B267-48AA-F5D80878017B}</Project>
+      <Project>{F5EDC322-BA6F-63A6-B069-238FAB5017A0}</Project>
       <Name>Unity.Timeline</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.InputSystem.csproj">
-      <Project>{4C9E1D2B-FE55-401D-8F6A-AC88E6F5DFB1}</Project>
+      <Project>{F19F520D-D2D8-D596-3145-E58EF2C4E5F6}</Project>
       <Name>Unity.InputSystem</Name>
     </ProjectReference>
   </ItemGroup>

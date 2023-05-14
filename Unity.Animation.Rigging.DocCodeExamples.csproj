@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{5E35BEDB-02C0-2D06-26D4-DE73BD77C26F}</ProjectGuid>
+    <ProjectGuid>{B8696EF1-18C7-2799-7A0A-3C3D993296C2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Unity.Animation.Rigging.DocCodeExamples</AssemblyName>
@@ -695,7 +695,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Unity.Animation.Rigging.csproj">
-      <Project>{AA8E0428-1C24-73D0-581A-1CCD83B282E2}</Project>
+      <Project>{65E0DBE9-0FC7-F6E9-F4C7-92C31873F076}</Project>
       <Name>Unity.Animation.Rigging</Name>
     </ProjectReference>
   </ItemGroup>

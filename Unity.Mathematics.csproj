@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{18F0BE1A-296D-3127-B18C-E70B5B2CD82F}</ProjectGuid>
+    <ProjectGuid>{D1BE3050-C4A6-BF59-F46F-F8456228BBBB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Unity.Mathematics</AssemblyName>
