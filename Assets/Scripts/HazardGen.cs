@@ -42,6 +42,11 @@ public class HazardGen : MonoBehaviour
         newLevel();
     }
 
+    public GameObject getPlayer()
+    {
+        return playerInstance;
+    }
+
     public void placeTrees()
     {
         var asdd = PoissonDiscSampling.GeneratePoints(15, new Vector2(280, 280), 160);
