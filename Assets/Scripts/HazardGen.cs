@@ -173,7 +173,6 @@ public class HazardGen : MonoBehaviour
 
 
             //MeteorFall met = gameObject.AddComponent<MeteorFall>() as MeteorFall;
-            
         }
     }
 

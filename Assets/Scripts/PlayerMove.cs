@@ -20,7 +20,7 @@ public class PlayerMove : MonoBehaviour
     private float waitForHold;
 
     private bool canDie;
-    //private float playerHealth; test
+
     public int maxHealth = 100;
     public int currentHealth;
     public HealthBar healthBar;
@@ -43,7 +43,6 @@ public class PlayerMove : MonoBehaviour
 
     void Start()
     {
-        healthBar = GameObject.Find("UI").GetComponent<HealthBar>();
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
     }
@@ -63,13 +62,21 @@ public class PlayerMove : MonoBehaviour
 
      void OnCollisionEnter(Collision collision)
      {
-         if (collision.collider.gameObject.CompareTag("Enemy"))
-         {
-             currentHealth -= GetComponent<EnemyStats>().enemyDamage;
-             
-         }
+        try
+        {
+            if (collision.collider.gameObject.CompareTag("Enemy"))
+            {
+                takeDamage(collision.collider.gameObject.GetComponent<EnemyStats>().enemyDamage);
+            }
+        }
 
+        catch
+        {
+            // Name of object which is enemy but no enemyStats
+            Debug.LogWarning(collision.collider.gameObject.name);
+        }
      }  
+
     public void cantDie()
     {
         canDie = false;
@@ -86,9 +93,9 @@ public class PlayerMove : MonoBehaviour
     // Assign inputs for player
     private void Awake()
     {
+        healthBar = GameObject.Find("HealthBar").GetComponent<HealthBar>();
         playerInputs = new PlayerInputActions();
-        canDie = true;
-        
+        canDie = true;   
     }
 
     // Assign controls on player spawn
@@ -165,7 +172,6 @@ public class PlayerMove : MonoBehaviour
                 }
             }
         }
-
 
         // Slow down dash gradually
         if(dash > -0.1f)
