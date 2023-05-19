@@ -1,46 +1,51 @@
 using Cinemachine;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerMove : MonoBehaviour
 {
-    private PlayerInputActions playerInputs;
     public float speed = 5f;
-    private InputAction playerControls;
-    private InputAction playerDashPress;
-    private InputAction playerDashHold;
+    public ParticleSystem ps;
     public Rigidbody rb;
     public GameObject player;
 
-    float levelUpDash;
-    float levelUpDashCd;
-    float levelUpSpeed;
-    private float actualLevelUpDashCd;
+    private PlayerInputActions playerInputs;
+    private InputAction playerControls;
+    private InputAction playerDashPress;
+    private InputAction playerDashHold;
+    
+    private float levelUpDash;
+    private float levelUpDashCd;
+    private float levelUpSpeed;
+    private float waitForHold;
 
+    private bool canDie;
+    private float playerHealth;
 
-    public ParticleSystem ps;
-    bool shootPs = false;
+    private float dash = 1f;
+    private float dashCd = 1f;
 
-    bool canDie;
-
+    private bool shootPs = false;
     Vector2 moveDir = Vector2.zero;
-    float dash = 1f;
-    float dashCd = 1f;
-    float waitForHold = 1.5f;
 
+    // Set player stats
     public void setStats(float dash, float dashcd, float speed)
     {
         levelUpDash = dash;
         levelUpDashCd = dashcd;
         levelUpSpeed = speed;
+        waitForHold = 1.5f;
     }
 
-    private void Awake()
+    public void setHealth(float health)
     {
-        playerInputs = new PlayerInputActions();
-        canDie = true;
+        playerHealth = health;
+    }
+
+    public void doDamage(float damage)
+    {
+        playerHealth -= damage;
+        gameOver();
     }
 
     public void cantDie()
@@ -50,12 +55,20 @@ public class PlayerMove : MonoBehaviour
 
     private void gameOver()
     {
-        if (canDie)
+        if (canDie && playerHealth < 0f)
         {
             // Game over
         }
     }
 
+    // Assign inputs for player
+    private void Awake()
+    {
+        playerInputs = new PlayerInputActions();
+        canDie = true;
+    }
+
+    // Assign controls on player spawn
     private void OnEnable()
     {
         playerControls = playerInputs.Player.Move;
@@ -65,17 +78,18 @@ public class PlayerMove : MonoBehaviour
         playerDashPress.performed += PlayerDashPress_performed;
         playerDashHold.performed += PlayerDashHold_performed;
 
-
         playerControls.Enable();
         playerDashPress.Enable();
         playerDashHold.Enable();        
     }
 
+    // Give player a light when field gets too dim
     public void lightsOn()
     {
         gameObject.transform.GetChild(2).gameObject.SetActive(true);
     }
 
+    // Hard limit for camera coming too close
     public void camerafov(float fov)
     {
         FindObjectOfType<CinemachineVirtualCamera>().m_Lens.FieldOfView = fov > 18f ? fov : 18f;
@@ -87,11 +101,14 @@ public class PlayerMove : MonoBehaviour
         if (dashCd < 0.1f)
         {
             shootPs = true;
-            dash = 1.85f * (1.2f*levelUpDash);
+            dash = 1.85f * (1.2f * levelUpDash);
             dashCd = 1.5f * actualLevelCd;
             waitForHold = 0.75f;
         }
-        else dash = 1.1f;
+        else if (dash < 1.1f)
+        {
+            dash = 1.1f;
+        }
     }
 
     private void PlayerDashHold_performed(InputAction.CallbackContext obj)
@@ -102,13 +119,16 @@ public class PlayerMove : MonoBehaviour
             dash = 2.75f * levelUpDash;
             dashCd = 3f * (1.5f * actualLevelCd);
         }
-        else dash = 1.15f;
+        else if (dash < 1.15f)
+        {
+            dash = 1.15f;
+        }
     }
 
     private void Update()
-    {
+    { 
+        // Check for dash cooldown effect
 
-        moveDir = playerControls.ReadValue<Vector2>();
         if(dashCd > -0.1f)
         {
             dashCd -= (1* Time.deltaTime);
@@ -123,11 +143,16 @@ public class PlayerMove : MonoBehaviour
             }
         }
 
+
+        // Slow down dash gradually
         if(dash > -0.1f)
         {
             dash -= (1 * Time.deltaTime);
         }
-        
+
+        // Movement
+        moveDir = playerControls.ReadValue<Vector2>();
+
         rb.velocity = new Vector3(moveDir.x * speed * levelUpSpeed * (dash > 1f ? dash : 1), rb.velocity.y, moveDir.y * speed * (dash > 1f ? dash : 1));
         if(rb.velocity.magnitude != 0)
         {
@@ -143,11 +168,8 @@ public class PlayerMove : MonoBehaviour
                 {
                     rb.rotation = Quaternion.identity;
                     Debug.LogWarning(e.Message);
-                }
-
-                
+                }                
             }
         }
-        
     }
 }

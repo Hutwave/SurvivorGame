@@ -27,7 +27,7 @@ public class MeteorFall : MonoBehaviour
         transform.position = Vector3.MoveTowards(currentLoc, targetLocation, Time.deltaTime * speed);
     }
 
-
+    // Check for collision
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.gameObject.layer==0 && onceOnly)
