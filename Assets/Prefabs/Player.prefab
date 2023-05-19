@@ -357,7 +357,7 @@ GameObject:
   - component: {fileID: 81722019}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -393,9 +393,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 12
+  ps: {fileID: 4874305311884269352}
   rb: {fileID: 81722018}
   player: {fileID: 5163212192447472499}
-  ps: {fileID: 4874305311884269352}
 --- !u!114 &471500602935424898
 MonoBehaviour:
   m_ObjectHideFlags: 0
