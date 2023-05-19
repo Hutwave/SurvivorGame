@@ -58,10 +58,13 @@
     <Analyzer Include="C:\Software\Unity\Hub\2020.3.33f1\Editor\2022.2.19f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Enemy.cs" />
     <Compile Include="Assets\Scripts\goalTrigger.cs" />
     <Compile Include="Assets\Scripts\PlayerInputActions.cs" />
+    <Compile Include="Assets\Scripts\EnemyStats.cs" />
     <Compile Include="Assets\Scripts\PlayerMove.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
+    <Compile Include="Assets\Scripts\HealthBar.cs" />
     <Compile Include="Assets\Scripts\HazardGen.cs" />
     <Compile Include="Assets\Scripts\TreeLogic.cs" />
     <Compile Include="Assets\Scripts\MeteorFall.cs" />
