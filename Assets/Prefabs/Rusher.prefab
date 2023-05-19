@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6658908601918360183}
   m_Layer: 0
   m_Name: Cylinder
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -122,9 +122,10 @@ GameObject:
   - component: {fileID: 3412311699979497849}
   - component: {fileID: 7315509947388828269}
   - component: {fileID: 5395656041594387631}
+  - component: {fileID: 6663524143017727700}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -225,7 +226,7 @@ Rigidbody:
   m_GameObject: {fileID: 6780380814406502301}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 1
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -277,7 +278,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd32bcf243684624cbcd6d6c922f6c13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  haz: {fileID: 0}
   goal: {fileID: 9180403492305681634, guid: 763c166933edd724295e3b9cb62dbeec, type: 3}
+--- !u!114 &6663524143017727700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6780380814406502301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9b4fc309bb78124b80afe81d0752f19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 10
+  enemyDamage: 10
 --- !u!1 &8189262167333554724
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,7 +305,7 @@ GameObject:
   - component: {fileID: 2140431454557952194}
   m_Layer: 0
   m_Name: Rusher
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

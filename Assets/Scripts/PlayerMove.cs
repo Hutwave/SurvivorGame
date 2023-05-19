@@ -20,7 +20,11 @@ public class PlayerMove : MonoBehaviour
     private float waitForHold;
 
     private bool canDie;
-    private float playerHealth;
+    //private float playerHealth; test
+    public int maxHealth = 100;
+    public int currentHealth;
+    public HealthBar healthBar;
+    
 
     private float dash = 1f;
     private float dashCd = 1f;
@@ -37,17 +41,35 @@ public class PlayerMove : MonoBehaviour
         waitForHold = 1.5f;
     }
 
-    public void setHealth(float health)
+    void Start()
     {
-        playerHealth = health;
+        healthBar = GameObject.Find("UI").GetComponent<HealthBar>();
+        currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
     }
 
-    public void doDamage(float damage)
+    //public void setHealth(float health)
+    //{
+    //    playerHealth = health;
+    //}
+
+    public void takeDamage(int damage)
     {
-        playerHealth -= damage;
+        currentHealth -= damage;
+
+        healthBar.SetHealth(currentHealth);
         gameOver();
     }
 
+     void OnCollisionEnter(Collision collision)
+     {
+         if (collision.collider.gameObject.CompareTag("Enemy"))
+         {
+             currentHealth -= GetComponent<EnemyStats>().enemyDamage;
+             
+         }
+
+     }  
     public void cantDie()
     {
         canDie = false;
@@ -55,7 +77,7 @@ public class PlayerMove : MonoBehaviour
 
     private void gameOver()
     {
-        if (canDie && playerHealth < 0f)
+        if (canDie && currentHealth < 0f)
         {
             // Game over
         }
@@ -66,6 +88,7 @@ public class PlayerMove : MonoBehaviour
     {
         playerInputs = new PlayerInputActions();
         canDie = true;
+        
     }
 
     // Assign controls on player spawn
