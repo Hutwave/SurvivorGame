@@ -13,6 +13,8 @@ public class HazardGen : MonoBehaviour
     private float minCd, maxCd;
     private GameObject playerInstance;
     private GameObject goal;
+    private GameObject treeFolder;
+    private GameObject generatedFolder;
     public GameObject uiObject;
     private List<GameObject> trees = new List<GameObject>();
     private int levelNumber;
@@ -29,6 +31,8 @@ public class HazardGen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        treeFolder = new GameObject("GeneratedTrees");
+        generatedFolder = new GameObject("GeneratedFolder");
         RenderSettings.fogStartDistance = -100f;
         RenderSettings.fogEndDistance = 180f;
         levelUpDash = 1f;
@@ -53,6 +57,9 @@ public class HazardGen : MonoBehaviour
         foreach (var point in asdd)
         {
             var oneTree = Instantiate(tree1, new Vector3(point.x - 140, 0, point.y - 140), Quaternion.identity);
+
+            
+            oneTree.transform.parent = treeFolder.transform;
             trees.Add(oneTree);
         }
     }
@@ -165,7 +172,7 @@ public class HazardGen : MonoBehaviour
                     break;
                 default: // meteor last 6%
                     Vector3 rngLocation = RandomizeLocation(5, 95, 60, out float randomized);
-                    var meteorfall = Instantiate(meteorFlying, new Vector3(rngLocation.x + randomized, rngLocation.y + 55f, rngLocation.z - (Mathf.Abs(randomized))), Quaternion.identity);
+                    var meteorfall = Instantiate(meteorFlying, new Vector3(rngLocation.x + randomized, rngLocation.y + 55f, rngLocation.z - (Mathf.Abs(randomized))), Quaternion.identity, generatedFolder);
                     meteorfall.GetComponent<MeteorFall>().xzChange = randomized;
                     hazards.Add(meteorfall);
                     break;

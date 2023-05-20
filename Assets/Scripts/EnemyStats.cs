@@ -15,6 +15,15 @@ public class EnemyStats : MonoBehaviour
         currentHealth = maxHealth;
     }
 
+    public void takeDamage(float dmg)
+    {
+        if (dmg > 1f)
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
+
     // Update is called once per frame
     void Update()
     {

@@ -6,8 +6,7 @@ using UnityEngine.AI;
 public class MoveDestination : MonoBehaviour
 {
     public HazardGen haz;
-    public GameObject goal;
-    private Transform actualGoal;
+    private Transform targetLoc;
     private NavMeshAgent agent;
     private void Awake()
     {
@@ -16,10 +15,10 @@ public class MoveDestination : MonoBehaviour
     }
     void Update()
     {
-        if(actualGoal == null)
+        if(targetLoc == null)
         {
-            actualGoal = haz.getPlayer().transform;
+            targetLoc = haz.getPlayer().transform;
         }
-        agent.destination = actualGoal.position;
+        agent.destination = targetLoc.position;
     }
 }

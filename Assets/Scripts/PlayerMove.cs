@@ -8,12 +8,15 @@ public class PlayerMove : MonoBehaviour
     public ParticleSystem ps;
     public Rigidbody rb;
     public GameObject player;
+    public GameObject energyBolt;
 
     private PlayerInputActions playerInputs;
     private InputAction playerControls;
     private InputAction playerDashPress;
     private InputAction playerDashHold;
-    
+
+    private InputAction playerSkill;
+
     private float levelUpDash;
     private float levelUpDashCd;
     private float levelUpSpeed;
@@ -24,7 +27,7 @@ public class PlayerMove : MonoBehaviour
     public int maxHealth = 100;
     public int currentHealth;
     public HealthBar healthBar;
-    
+
 
     private float dash = 1f;
     private float dashCd = 1f;
@@ -47,11 +50,6 @@ public class PlayerMove : MonoBehaviour
         healthBar.SetMaxHealth(maxHealth);
     }
 
-    //public void setHealth(float health)
-    //{
-    //    playerHealth = health;
-    //}
-
     public void takeDamage(int damage)
     {
         currentHealth -= damage;
@@ -60,8 +58,8 @@ public class PlayerMove : MonoBehaviour
         gameOver();
     }
 
-     void OnCollisionEnter(Collision collision)
-     {
+    void OnCollisionEnter(Collision collision)
+    {
         try
         {
             if (collision.collider.gameObject.CompareTag("Enemy"))
@@ -75,7 +73,7 @@ public class PlayerMove : MonoBehaviour
             // Name of object which is enemy but no enemyStats
             Debug.LogWarning(collision.collider.gameObject.name);
         }
-     }  
+    }
 
     public void cantDie()
     {
@@ -95,7 +93,7 @@ public class PlayerMove : MonoBehaviour
     {
         healthBar = GameObject.Find("HealthBar").GetComponent<HealthBar>();
         playerInputs = new PlayerInputActions();
-        canDie = true;   
+        canDie = true;
     }
 
     // Assign controls on player spawn
@@ -104,13 +102,16 @@ public class PlayerMove : MonoBehaviour
         playerControls = playerInputs.Player.Move;
         playerDashPress = playerInputs.Player.DashPress;
         playerDashHold = playerInputs.Player.DashHold;
+        playerSkill = playerInputs.Player.Skill;
 
         playerDashPress.performed += PlayerDashPress_performed;
         playerDashHold.performed += PlayerDashHold_performed;
+        playerSkill.performed += PlayerSkill_performed;
 
         playerControls.Enable();
         playerDashPress.Enable();
-        playerDashHold.Enable();        
+        playerDashHold.Enable();
+        playerSkill.Enable();
     }
 
     // Give player a light when field gets too dim
@@ -155,15 +156,29 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
+    private void PlayerSkill_performed(InputAction.CallbackContext obj)
+    {
+        // TODO: These numbers from somewhere 
+        float damage = 100f;
+        float explosionRadius = 2f;
+        
+        GameObject bulletToShoot = (GameObject)Instantiate(energyBolt, gameObject.transform.position, gameObject.transform.rotation);
+
+        ProjectileBasic projectileStats = bulletToShoot.GetComponent<ProjectileBasic>();
+        projectileStats.Seek(FindAnyObjectByType<EnemyStats>().transform);
+
+        projectileStats.setDamageAndRadius(damage, explosionRadius);
+    }
+
     private void Update()
-    { 
+    {
         // Check for dash cooldown effect
 
-        if(dashCd > -0.1f)
+        if (dashCd > -0.1f)
         {
-            dashCd -= (1* Time.deltaTime);
-            waitForHold -= (1* Time.deltaTime);
-            if(dashCd < 0.05f)
+            dashCd -= (1 * Time.deltaTime);
+            waitForHold -= (1 * Time.deltaTime);
+            if (dashCd < 0.05f)
             {
                 if (shootPs)
                 {
@@ -174,7 +189,7 @@ public class PlayerMove : MonoBehaviour
         }
 
         // Slow down dash gradually
-        if(dash > -0.1f)
+        if (dash > -0.1f)
         {
             dash -= (1 * Time.deltaTime);
         }
@@ -183,12 +198,13 @@ public class PlayerMove : MonoBehaviour
         moveDir = playerControls.ReadValue<Vector2>();
 
         rb.velocity = new Vector3(moveDir.x * speed * levelUpSpeed * (dash > 1f ? dash : 1), rb.velocity.y, moveDir.y * speed * (dash > 1f ? dash : 1));
-        if(rb.velocity.magnitude != 0)
+        if (rb.velocity.magnitude != 0)
         {
             var rotation = Quaternion.LookRotation(rb.velocity, transform.up);
             rotation.x = 0;
             rotation.z = 0;
-            if(Mathf.Abs(rotation.y) > 0.01f) {
+            if (Mathf.Abs(rotation.y) > 0.01f)
+            {
                 try
                 {
                     rb.rotation = rotation;
@@ -197,7 +213,7 @@ public class PlayerMove : MonoBehaviour
                 {
                     rb.rotation = Quaternion.identity;
                     Debug.LogWarning(e.Message);
-                }                
+                }
             }
         }
     }
