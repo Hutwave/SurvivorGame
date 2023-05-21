@@ -1,6 +1,8 @@
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Linq;
+
 
 public class PlayerMove : MonoBehaviour
 {
@@ -15,7 +17,10 @@ public class PlayerMove : MonoBehaviour
     private InputAction playerDashPress;
     private InputAction playerDashHold;
 
-    private InputAction playerSkill;
+    private InputAction playerSkillE;
+    private InputAction playerSkillF;
+    private InputAction playerSkillR;
+    private InputAction playerSkillG;
 
     private float levelUpDash;
     private float levelUpDashCd;
@@ -102,16 +107,26 @@ public class PlayerMove : MonoBehaviour
         playerControls = playerInputs.Player.Move;
         playerDashPress = playerInputs.Player.DashPress;
         playerDashHold = playerInputs.Player.DashHold;
-        playerSkill = playerInputs.Player.Skill;
+
+        playerSkillE = playerInputs.Player.SkillE;
+        playerSkillF = playerInputs.Player.SkillF;
+        playerSkillR = playerInputs.Player.SkillR;
+        playerSkillG = playerInputs.Player.SkillG;
 
         playerDashPress.performed += PlayerDashPress_performed;
         playerDashHold.performed += PlayerDashHold_performed;
-        playerSkill.performed += PlayerSkill_performed;
+        playerSkillE.performed += PlayerSkillE_performed;
+        playerSkillR.performed += PlayerSkillR_performed;
+        playerSkillG.performed += PlayerSkillG_performed;
+        playerSkillF.performed += PlayerSkillF_performed;
 
         playerControls.Enable();
         playerDashPress.Enable();
         playerDashHold.Enable();
-        playerSkill.Enable();
+        playerSkillE.Enable();
+        playerSkillF.Enable();
+        playerSkillR.Enable();
+        playerSkillG.Enable();
     }
 
     // Give player a light when field gets too dim
@@ -124,6 +139,37 @@ public class PlayerMove : MonoBehaviour
     public void camerafov(float fov)
     {
         FindObjectOfType<CinemachineVirtualCamera>().m_Lens.FieldOfView = fov > 18f ? fov : 18f;
+    }
+
+    public Transform getClosestTarget()
+    {
+        Transform target = null;
+        float closestDist = 100000f;
+
+        var enemyList = FindObjectsOfType<EnemyStats>();
+        if (enemyList.Length > 0)
+        {
+            if (enemyList.Length > 40)
+            {
+                var tempEnemyList = Physics.OverlapSphere(transform.position, 5f);
+                if (tempEnemyList.Length > 0 && tempEnemyList.Length < 50)
+                {
+                    enemyList = tempEnemyList.Select(x => x.gameObject.GetComponent<EnemyStats>()).ToArray();
+                }
+            }
+
+            foreach (var enem in enemyList)
+            {
+                Vector3 dirr = enem.transform.position - transform.position;
+                float dist = dirr.sqrMagnitude;
+                if (dist < closestDist)
+                {
+                    target = enem.transform;
+                    closestDist = dist;
+                }
+            }
+        }
+        return target;
     }
 
     private void PlayerDashPress_performed(InputAction.CallbackContext obj)
@@ -156,18 +202,76 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
-    private void PlayerSkill_performed(InputAction.CallbackContext obj)
+    private void PlayerSkillE_performed(InputAction.CallbackContext obj)
     {
         // TODO: These numbers from somewhere 
         float damage = 100f;
         float explosionRadius = 2f;
-        
+
         GameObject bulletToShoot = (GameObject)Instantiate(energyBolt, gameObject.transform.position, gameObject.transform.rotation);
 
         ProjectileBasic projectileStats = bulletToShoot.GetComponent<ProjectileBasic>();
+        projectileStats.setProjectile(Mage1st.FireBall());
         projectileStats.Seek(FindAnyObjectByType<EnemyStats>().transform);
+    }
 
-        projectileStats.setDamageAndRadius(damage, explosionRadius);
+    private void PlayerSkillF_performed(InputAction.CallbackContext obj)
+    {
+        ProjectileObject po = Mage1st.EnergyBolt();
+        Transform target = null;
+
+        if(po.projectileType == ProjectileType.Tracking)
+        {
+            target = getClosestTarget();
+        }
+
+        // TODO: These numbers from somewhere 
+        float damage = 100f;
+        float explosionRadius = 2f;
+
+        if(target == null)
+        {
+            return;
+        }
+
+        GameObject bulletToShoot = (GameObject)Instantiate(energyBolt, gameObject.transform.position, gameObject.transform.rotation);
+
+        ProjectileBasic projectileStats = bulletToShoot.GetComponent<ProjectileBasic>();
+        projectileStats.setProjectile(Mage1st.EnergyBolt());
+        projectileStats.Seek(target.transform);
+    }
+
+    private void PlayerSkillR_performed(InputAction.CallbackContext obj)
+    {
+        // TODO: These numbers from somewhere 
+        float damage = 100f;
+        float explosionRadius = 2f;
+
+        GameObject bulletToShoot = (GameObject)Instantiate(energyBolt, gameObject.transform.position, gameObject.transform.rotation);
+
+        ProjectileBasic projectileStats = bulletToShoot.GetComponent<ProjectileBasic>();
+        projectileStats.setProjectile(Mage1st.ColdBeam());
+        projectileStats.Seek(FindAnyObjectByType<EnemyStats>().transform);
+    }
+
+    private void PlayerSkillG_performed(InputAction.CallbackContext obj)
+    {
+        // TODO: These numbers from somewhere 
+        float damage = 100f;
+        float explosionRadius = 2f;
+
+        GameObject bulletToShoot = (GameObject)Instantiate(energyBolt, gameObject.transform.position, gameObject.transform.rotation);
+
+        Plane plane = new Plane(Vector3.up, Vector3.zero);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        plane.Raycast(ray, out var place);
+        var mouseLoc = ray.GetPoint(place);
+
+        ProjectileBasic projectileStats = bulletToShoot.GetComponent<ProjectileBasic>();
+        projectileStats.setProjectile(Mage1st.HolyArrow());
+        projectileStats.Seek(mouseLoc);
+        //projectileStats.Seek(FindAnyObjectByType<EnemyStats>().transform);
     }
 
     private void Update()
@@ -196,25 +300,13 @@ public class PlayerMove : MonoBehaviour
 
         // Movement
         moveDir = playerControls.ReadValue<Vector2>();
-
         rb.velocity = new Vector3(moveDir.x * speed * levelUpSpeed * (dash > 1f ? dash : 1), rb.velocity.y, moveDir.y * speed * (dash > 1f ? dash : 1));
         if (rb.velocity.magnitude != 0)
         {
             var rotation = Quaternion.LookRotation(rb.velocity, transform.up);
             rotation.x = 0;
             rotation.z = 0;
-            if (Mathf.Abs(rotation.y) > 0.01f)
-            {
-                try
-                {
-                    rb.rotation = rotation;
-                }
-                catch (System.Exception e)
-                {
-                    rb.rotation = Quaternion.identity;
-                    Debug.LogWarning(e.Message);
-                }
-            }
+            rb.rotation = rotation.normalized;
         }
     }
 }

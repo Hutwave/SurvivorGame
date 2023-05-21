@@ -172,7 +172,8 @@ public class HazardGen : MonoBehaviour
                     break;
                 default: // meteor last 6%
                     Vector3 rngLocation = RandomizeLocation(5, 95, 60, out float randomized);
-                    var meteorfall = Instantiate(meteorFlying, new Vector3(rngLocation.x + randomized, rngLocation.y + 55f, rngLocation.z - (Mathf.Abs(randomized))), Quaternion.identity, generatedFolder);
+                    var meteorfall = Instantiate(meteorFlying, new Vector3(rngLocation.x + randomized, rngLocation.y + 55f, rngLocation.z - (Mathf.Abs(randomized))), Quaternion.identity);
+                    meteorfall.transform.parent = generatedFolder.transform;
                     meteorfall.GetComponent<MeteorFall>().xzChange = randomized;
                     hazards.Add(meteorfall);
                     break;

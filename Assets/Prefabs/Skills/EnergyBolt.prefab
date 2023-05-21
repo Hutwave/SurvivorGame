@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 451888586102026012}
   - component: {fileID: 3339055859730576270}
+  - component: {fileID: 6442861748017369598}
   m_Layer: 0
   m_Name: EnergyBolt
   m_TagString: Untagged
@@ -46,9 +47,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b18d9d5f292818140b63d7265e86dc78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8
   explosion: {fileID: 3348126747438384315, guid: 6b92ca5ab15c21d488ba0d2973f6a739,
     type: 3}
+  proj:
+    rid: -2
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+--- !u!135 &6442861748017369598
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3484992894819570639}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3997799954363977305
 GameObject:
   m_ObjectHideFlags: 0

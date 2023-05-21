@@ -25,6 +25,7 @@ public class ExplosionCheck : MonoBehaviour
                 enemy.transform.GetComponent<EnemyStats>().takeDamage(damage);
             }
         }
+        Destroy(gameObject);
     }
 
 }

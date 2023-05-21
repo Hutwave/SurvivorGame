@@ -55,9 +55,36 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Skill"",
+                    ""name"": ""Skill F"",
                     ""type"": ""Button"",
                     ""id"": ""0f040d79-3452-4266-b82c-12fb75cffbc3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Skill G"",
+                    ""type"": ""Button"",
+                    ""id"": ""43fee716-605a-43df-b34e-bdaba64bb1dd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Skill E"",
+                    ""type"": ""Button"",
+                    ""id"": ""a6a951bc-5801-482e-b1f7-81c6ab78afeb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Skill R"",
+                    ""type"": ""Button"",
+                    ""id"": ""1c0dafae-f252-48af-850b-86bd63735a5b"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -149,7 +176,40 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Skill"",
+                    ""action"": ""Skill F"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ab247282-8af6-4a12-80b8-6125e424bd1d"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Skill G"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f0eb8bde-8b27-46c4-8214-219779f2390d"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Skill E"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""82ba4ceb-dfdc-4fca-88db-72845820cf29"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Skill R"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -163,7 +223,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_DashHold = m_Player.FindAction("DashHold", throwIfNotFound: true);
         m_Player_DashPress = m_Player.FindAction("DashPress", throwIfNotFound: true);
-        m_Player_Skill = m_Player.FindAction("Skill", throwIfNotFound: true);
+        m_Player_SkillF = m_Player.FindAction("Skill F", throwIfNotFound: true);
+        m_Player_SkillG = m_Player.FindAction("Skill G", throwIfNotFound: true);
+        m_Player_SkillE = m_Player.FindAction("Skill E", throwIfNotFound: true);
+        m_Player_SkillR = m_Player.FindAction("Skill R", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -228,7 +291,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_DashHold;
     private readonly InputAction m_Player_DashPress;
-    private readonly InputAction m_Player_Skill;
+    private readonly InputAction m_Player_SkillF;
+    private readonly InputAction m_Player_SkillG;
+    private readonly InputAction m_Player_SkillE;
+    private readonly InputAction m_Player_SkillR;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -236,7 +302,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @DashHold => m_Wrapper.m_Player_DashHold;
         public InputAction @DashPress => m_Wrapper.m_Player_DashPress;
-        public InputAction @Skill => m_Wrapper.m_Player_Skill;
+        public InputAction @SkillF => m_Wrapper.m_Player_SkillF;
+        public InputAction @SkillG => m_Wrapper.m_Player_SkillG;
+        public InputAction @SkillE => m_Wrapper.m_Player_SkillE;
+        public InputAction @SkillR => m_Wrapper.m_Player_SkillR;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -255,9 +324,18 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @DashPress.started += instance.OnDashPress;
             @DashPress.performed += instance.OnDashPress;
             @DashPress.canceled += instance.OnDashPress;
-            @Skill.started += instance.OnSkill;
-            @Skill.performed += instance.OnSkill;
-            @Skill.canceled += instance.OnSkill;
+            @SkillF.started += instance.OnSkillF;
+            @SkillF.performed += instance.OnSkillF;
+            @SkillF.canceled += instance.OnSkillF;
+            @SkillG.started += instance.OnSkillG;
+            @SkillG.performed += instance.OnSkillG;
+            @SkillG.canceled += instance.OnSkillG;
+            @SkillE.started += instance.OnSkillE;
+            @SkillE.performed += instance.OnSkillE;
+            @SkillE.canceled += instance.OnSkillE;
+            @SkillR.started += instance.OnSkillR;
+            @SkillR.performed += instance.OnSkillR;
+            @SkillR.canceled += instance.OnSkillR;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -271,9 +349,18 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @DashPress.started -= instance.OnDashPress;
             @DashPress.performed -= instance.OnDashPress;
             @DashPress.canceled -= instance.OnDashPress;
-            @Skill.started -= instance.OnSkill;
-            @Skill.performed -= instance.OnSkill;
-            @Skill.canceled -= instance.OnSkill;
+            @SkillF.started -= instance.OnSkillF;
+            @SkillF.performed -= instance.OnSkillF;
+            @SkillF.canceled -= instance.OnSkillF;
+            @SkillG.started -= instance.OnSkillG;
+            @SkillG.performed -= instance.OnSkillG;
+            @SkillG.canceled -= instance.OnSkillG;
+            @SkillE.started -= instance.OnSkillE;
+            @SkillE.performed -= instance.OnSkillE;
+            @SkillE.canceled -= instance.OnSkillE;
+            @SkillR.started -= instance.OnSkillR;
+            @SkillR.performed -= instance.OnSkillR;
+            @SkillR.canceled -= instance.OnSkillR;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -296,6 +383,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnDashHold(InputAction.CallbackContext context);
         void OnDashPress(InputAction.CallbackContext context);
-        void OnSkill(InputAction.CallbackContext context);
+        void OnSkillF(InputAction.CallbackContext context);
+        void OnSkillG(InputAction.CallbackContext context);
+        void OnSkillE(InputAction.CallbackContext context);
+        void OnSkillR(InputAction.CallbackContext context);
     }
 }

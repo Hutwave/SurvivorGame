@@ -2,67 +2,94 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum ProjectileType
+{
+    Tracking,
+    Targeted,
+    Directional
+}
+
 public class ProjectileBasic : MonoBehaviour
 {
-    public float speed = 10f;
-
-    private Transform target;
-    private float damage;
-
+    internal ProjectileType projectileType;
+    internal float speed = 10f;
     public GameObject explosion;
+    internal bool isExplosive;
+    internal bool piercing;
+    
+    [SerializeReference]
+    public ProjectileObject proj;
+    
 
-    private float explosionRadius;
+    internal Transform target;
+    internal Vector3 targetVector;
+    internal float damage;
+    internal float explosionRadius;
 
-    private float poison = 0;
-    private float slow = 0;
-    private float fire = 0;
-    private float weakened = 0;
-    private float regen = 0;
-    private float hardened = 0;
+    internal float range;
+    internal float lifeTime;
 
-    // Update is called once per frame
-    void Update()
+    private bool targetedHasDirection;
+
+    public void setProjectile(ProjectileObject obj)
     {
-        if (target == null || !target.gameObject.activeInHierarchy)
+        if(obj.projectileType != null)
         {
-            HitTarget();
-            return;
+            projectileType = (ProjectileType)obj.projectileType;
+        }
+        
+        if(obj.isExplosive != null)
+        {
+            isExplosive = (bool)obj.isExplosive;
+        }
+        
+        if(obj.isPiercing != null)
+        {
+            piercing = (bool)obj.isPiercing;
         }
 
-        Vector3 dir = target.position - transform.position;
-        float distanceThisFrame = speed * Time.deltaTime;
-
-        if (dir.magnitude <= distanceThisFrame)
+        if (obj.damage != null)
         {
-            HitTarget();
+            damage = (float)obj.damage;
         }
-        transform.Translate(dir.normalized * distanceThisFrame, Space.World);
+
+        if (obj.explosionRadius != null)
+        {
+            explosionRadius = (float)obj.explosionRadius;
+        }
+
+        if (obj.range != null)
+        {
+            range = (float)obj.range;
+        }
+
+        if (obj.lifeTime != null)
+        {
+            lifeTime = (float)obj.lifeTime;
+        }
+
+        if (obj.speed != null)
+        {
+            speed = (float)obj.speed;
+        }
     }
 
-    public void setDamageAndRadius(float dmg, float radius)
+    internal void HitTarget()
     {
-        damage = dmg;
-        explosionRadius = radius;
-    }
-
-    private void HitTarget()
-    {
-        /*RunnerHealth hp = target.GetComponent<RunnerHealth>();
-        if (poison > 0)
+        if (isExplosive)
         {
-            hp.addPoison(100);
+            var explosionObject = Instantiate(explosion, transform.position, Quaternion.identity);
+            explosionObject.GetComponent<ExplosionCheck>().setDmg(damage, explosionRadius);
         }
-        if (slow > 0)
-        {
-            hp.addSlow(30);
-        }
-        hp.TakeDamage(damage);
-        */
-
-        var smallExplosion = Instantiate(explosion, transform.position, Quaternion.identity);
-        smallExplosion.GetComponent<ExplosionCheck>().setDmg(damage, explosionRadius);
+        
         Destroy(this.gameObject);
         return;
+    }
+
+    public void Seek(Vector3 _target)
+    {
+        targetVector = _target;
     }
 
     public void Seek(Transform _target)
@@ -70,9 +97,78 @@ public class ProjectileBasic : MonoBehaviour
         target = _target;
     }
 
+    public void Update()
+    {
+        float distanceThisFrame = speed * Time.deltaTime;
+        switch (projectileType)
+        {
+            /// TARGETED /// 
+            case ProjectileType.Targeted:
+                
+                Vector3 targetDir = targetVector - transform.position;
+                if (!isExplosive && targetedHasDirection)
+                {
+                    targetDir = transform.forward;
+                }
+
+                else if (targetDir.magnitude <= distanceThisFrame)
+                {
+                    HitTarget();
+                }
+
+                targetedHasDirection = false;
+                transform.Translate(targetDir.normalized * distanceThisFrame, Space.World);
+                break;
+
+            /// TRACKING /// 
+            case ProjectileType.Tracking:
+                if (target == null)
+                {
+                    Destroy(gameObject);
+                }
+                Vector3 trackDir = target.transform.position - transform.position;
+                if (trackDir.magnitude <= distanceThisFrame)
+                {
+                    HitTarget();
+                }
+                transform.Translate(trackDir.normalized * distanceThisFrame, Space.World);
+                break;
+
+            /// DIRECTIONAL /// 
+            case ProjectileType.Directional:
+                Vector3 dir = transform.forward;
+                transform.Translate(dir * speed * Time.deltaTime, Space.World);
+                break;
+        }
+    }
+
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            if (!isExplosive)
+            {
+                collision.gameObject.transform.GetComponent<EnemyStats>().takeDamage(damage);
+            }
+
+            if (!piercing)
+            {
+                HitTarget();
+            }
+        }
+    }
+
+
     /*
    public void addStatus(statusEnums statusEnum, float amount)
    {
+    private float poison = 0;
+    private float slow = 0;
+    private float fire = 0;
+    private float weakened = 0;
+    private float regen = 0;
+    private float hardened = 0;
 
        switch (statusEnum)
        {
