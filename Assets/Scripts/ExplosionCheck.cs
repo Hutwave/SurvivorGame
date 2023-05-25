@@ -25,7 +25,13 @@ public class ExplosionCheck : MonoBehaviour
                 enemy.transform.GetComponent<EnemyStats>().takeDamage(damage);
             }
         }
-        Destroy(gameObject);
     }
 
+    public void Update()
+    {
+        if (this.GetComponentInChildren<ParticleSystem>().isStopped)
+        {
+            Destroy(gameObject);
+        }
+    }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 
@@ -34,6 +35,7 @@ public class ProjectileBasic : MonoBehaviour
 
     public void setProjectile(ProjectileObject obj)
     {
+        this.explosion = (GameObject)AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Skills/Small AoE.prefab", typeof(GameObject));
         if(obj.projectileType != null)
         {
             projectileType = (ProjectileType)obj.projectileType;
@@ -126,7 +128,14 @@ public class ProjectileBasic : MonoBehaviour
                 {
                     Destroy(gameObject);
                 }
+
+                if (target.gameObject.activeInHierarchy)
+                {
+                    HitTarget();
+                }
+
                 Vector3 trackDir = target.transform.position - transform.position;
+                
                 if (trackDir.magnitude <= distanceThisFrame)
                 {
                     HitTarget();

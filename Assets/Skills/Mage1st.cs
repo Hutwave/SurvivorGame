@@ -17,14 +17,14 @@ public static class Mage1st
     public static ProjectileObject HolyArrow()
     {
         var ob = new ProjectileObject();
-        ob.setProj(ProjectileType.Targeted, false, false, 100f);
+        ob.setProj(ProjectileType.Targeted, true, false, 100f);
         return ob;
     }
     
     public static ProjectileObject ColdBeam()
     {
         var ob = new ProjectileObject();
-        ob.setProj(ProjectileType.Directional, false, true, 100f);
+        ob.setProj(ProjectileType.Directional, true, true, 100f);
         return ob;
     }
 }
