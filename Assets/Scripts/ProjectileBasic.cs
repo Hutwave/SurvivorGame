@@ -158,7 +158,7 @@ public class ProjectileBasic : MonoBehaviour
         {
             if (!isExplosive)
             {
-                collision.gameObject.transform.GetComponent<EnemyStats>().takeDamage(damage);
+                collision.gameObject.transform.GetComponent<EnemyStats>().takeDamage(Mathf.RoundToInt(damage));
             }
 
             if (!piercing)

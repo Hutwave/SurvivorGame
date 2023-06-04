@@ -18,11 +18,11 @@ public class ExplosionCheck : MonoBehaviour
     public void Explode()
     {
         var sphere = Physics.OverlapSphere(this.gameObject.transform.position, radius);
-        foreach(var enemy in sphere)
+        foreach (var enemy in sphere)
         {
             if (enemy.gameObject.tag == "Enemy")
             {
-                enemy.transform.GetComponent<EnemyStats>().takeDamage(damage);
+                enemy.transform.GetComponent<EnemyStats>().takeDamage(Mathf.RoundToInt(damage));
             }
         }
     }

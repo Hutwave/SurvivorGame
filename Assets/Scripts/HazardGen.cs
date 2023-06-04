@@ -28,6 +28,9 @@ public class HazardGen : MonoBehaviour
     float levelUpRng;
     float cameraFov;
 
+    int exp;
+    int meso;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,6 +52,11 @@ public class HazardGen : MonoBehaviour
     public GameObject getPlayer()
     {
         return playerInstance;
+    }
+
+    public void getExp(int expAmount)
+    {
+        exp += expAmount;
     }
 
     public void placeTrees()

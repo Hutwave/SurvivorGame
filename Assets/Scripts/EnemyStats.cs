@@ -8,19 +8,34 @@ public class EnemyStats : MonoBehaviour
     private int currentHealth;
     public int enemyDamage = 10;
 
+    public int exp;
+    public int mesoDrop;
+
+    private HazardGen gameManager;
+
 
     // Start is called before the first frame update
     void Start()
     {
         currentHealth = maxHealth;
+        gameManager = FindAnyObjectByType<HazardGen>();
     }
 
-    public void takeDamage(float dmg)
+    public void takeDamage(int dmg)
     {
-        if (dmg > 1f)
+        this.currentHealth -= dmg;
+        if (currentHealth < 1)
         {
-            Destroy(this.gameObject);
+            enemyDie();
         }
+    }
+
+    public void enemyDie()
+    {
+
+        gameManager.getExp(exp);
+        // anna mesoja
+        Destroy(this.gameObject);
     }
 
 
