@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2681558646241685576}
-  - component: {fileID: 5640309233276117258}
   - component: {fileID: 1571259011239512436}
+  - component: {fileID: -4080051881545672594}
   m_Layer: 0
-  m_Name: Blue Snail
+  m_Name: Blue_Snail
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,23 +34,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5640309233276117258
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1914813133687763473}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9b4fc309bb78124b80afe81d0752f19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 10
-  currentHealth: 0
-  enemyDamage: 10
-  exp: 4
-  mesoDrop: 0
 --- !u!135 &1571259011239512436
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -72,6 +55,23 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.8
   m_Center: {x: 0.03, y: 0.58, z: 0}
+--- !u!114 &-4080051881545672594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1914813133687763473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9b4fc309bb78124b80afe81d0752f19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 50
+  enemyDamage: 10
+  speed: 5
+  exp: 0
+  mesoDrop: 0
 --- !u!1001 &3538639341254454762
 PrefabInstance:
   m_ObjectHideFlags: 0

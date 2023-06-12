@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class ProjectileObject
 {
-    public ProjectileType? projectileType;
-    public bool? isExplosive;
-    public bool? isPiercing;
+    public ProjectileType projectileType;
+    public bool isExplosive;
+    public bool isPiercing;
 
-    public float? damage;
-    public float? explosionRadius;
-    public float? range;
-    public float? lifeTime;
-    public float? speed;
+    public float damage;
+    public float explosionRadius;
+    public float range;
+    public float lifeTime;
+    public float speed;
 
+    public GameObject projectileGameObject;
 
     public ProjectileObject()
     {
@@ -52,6 +53,9 @@ public class ProjectileObject
                 break;
             case ProjectileType.Directional:
                 DefaultDirectional(explode, pierce, dmg);
+                break;
+            case ProjectileType.Pointed:
+                DefaultPointed(explode, pierce, dmg);
                 break;
         }
     }
@@ -92,5 +96,17 @@ public class ProjectileObject
         range = 100f;
         lifeTime = 5f;
         speed = 20f;
+    }
+
+    public void DefaultPointed(bool explode, bool pierce, float dmg)
+    {
+        projectileType = ProjectileType.Pointed;
+        isExplosive = explode;
+        isPiercing = pierce;
+        damage = dmg;
+        explosionRadius = 1f;
+        range = 100f;
+        lifeTime = 5f;
+        speed = 8f;
     }
 }

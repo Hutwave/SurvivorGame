@@ -2,7 +2,7 @@ using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Linq;
-
+using System.Collections.Generic;
 
 public class PlayerMove : MonoBehaviour
 {
@@ -22,9 +22,11 @@ public class PlayerMove : MonoBehaviour
     private InputAction playerSkillR;
     private InputAction playerSkillG;
 
-    private float levelUpDash;
-    private float levelUpDashCd;
-    private float levelUpSpeed;
+    private ProjectileObject Skill1;
+    private ProjectileObject Skill2;
+    private ProjectileObject Skill3;
+    private ProjectileObject Skill4;
+
     private float waitForHold;
 
     private bool canDie;
@@ -32,6 +34,7 @@ public class PlayerMove : MonoBehaviour
     public int maxHealth = 100;
     public int currentHealth;
     public HealthBar healthBar;
+    private HazardGen gameManager;
 
 
     private float dash = 1f;
@@ -43,16 +46,19 @@ public class PlayerMove : MonoBehaviour
     // Set player stats
     public void setStats(float dash, float dashcd, float speed)
     {
-        levelUpDash = dash;
-        levelUpDashCd = dashcd;
-        levelUpSpeed = speed;
         waitForHold = 1.5f;
     }
 
     void Start()
     {
+        gameManager = FindAnyObjectByType<HazardGen>();
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
+        Skill1 = Mage1st.ColdBeam();
+        Skill2 = Mage1st.EnergyBolt();
+        Skill3 = Mage1st.FireBall();
+        Skill4 = Mage1st.HolyArrow();
+
     }
 
     public void takeDamage(int damage)
@@ -89,14 +95,14 @@ public class PlayerMove : MonoBehaviour
     {
         if (canDie && currentHealth < 0f)
         {
-            // Game over
+
         }
     }
 
     // Assign inputs for player
     private void Awake()
     {
-        healthBar = GameObject.Find("HealthBar").GetComponent<HealthBar>();
+        healthBar = FindAnyObjectByType<HealthBar>();
         playerInputs = new PlayerInputActions();
         canDie = true;
     }
@@ -132,7 +138,7 @@ public class PlayerMove : MonoBehaviour
     // Give player a light when field gets too dim
     public void lightsOn()
     {
-        gameObject.transform.GetChild(2).gameObject.SetActive(true);
+        //gameObject.transform.GetChild(2).gameObject.SetActive(true);
     }
 
     // Hard limit for camera coming too close
@@ -146,40 +152,64 @@ public class PlayerMove : MonoBehaviour
         Transform target = null;
         float closestDist = 100000f;
 
-        var enemyList = FindObjectsOfType<EnemyStats>();
-        if (enemyList.Length > 0)
-        {
-            if (enemyList.Length > 40)
-            {
-                var tempEnemyList = Physics.OverlapSphere(transform.position, 5f);
-                if (tempEnemyList.Length > 0 && tempEnemyList.Length < 50)
-                {
-                    enemyList = tempEnemyList.Select(x => x.gameObject.GetComponent<EnemyStats>()).ToArray();
-                }
-            }
+        List<EnemyStats> enemyList = new List<EnemyStats>();
+        var tempEnemyList = Physics.OverlapSphere(transform.position, 10f);
+        tempEnemyList = tempEnemyList.Where(x => x.transform.TryGetComponent<EnemyStats>(out _)).ToArray();
 
-            foreach (var enem in enemyList)
+        if (tempEnemyList.Length > 0)
+        {
+            foreach (var foundEnemy in tempEnemyList)
             {
-                Vector3 dirr = enem.transform.position - transform.position;
-                float dist = dirr.sqrMagnitude;
-                if (dist < closestDist)
+                enemyList.Add(foundEnemy.transform.GetComponent<EnemyStats>());
+            }
+        }
+        else
+        {
+            tempEnemyList = Physics.OverlapSphere(transform.position, 20f);
+            tempEnemyList = tempEnemyList.Where(x => x.transform.TryGetComponent<EnemyStats>(out _)).ToArray();
+            if (tempEnemyList.Length > 0)
+            {
+                foreach (var foundEnemy in tempEnemyList)
                 {
-                    target = enem.transform;
-                    closestDist = dist;
+                    enemyList.Add(foundEnemy.transform.GetComponent<EnemyStats>());
                 }
             }
         }
+
+        if (enemyList == null || enemyList.Count == 0)
+        {
+            return null;
+        }
+
+        foreach (var enem in enemyList)
+        {
+            if (enem.CompareTag("Enemy"))
+                try
+                {
+                    Vector3 dirr = enem.transform.position - transform.position;
+                    float dist = dirr.sqrMagnitude;
+                    if (dist < closestDist)
+                    {
+                        target = enem.transform;
+                        closestDist = dist;
+                    }
+                }
+                catch
+                {
+                    Destroy(this);
+                }
+        }
+
         return target;
     }
 
     private void PlayerDashPress_performed(InputAction.CallbackContext obj)
     {
-        float actualLevelCd = (1f - (1f - levelUpDashCd));
         if (dashCd < 0.1f)
         {
             shootPs = true;
-            dash = 1.85f * (1.2f * levelUpDash);
-            dashCd = 1.5f * actualLevelCd;
+            dash = 1.85f;
+            dashCd = 1.5f;
             waitForHold = 0.75f;
         }
         else if (dash < 1.1f)
@@ -190,11 +220,10 @@ public class PlayerMove : MonoBehaviour
 
     private void PlayerDashHold_performed(InputAction.CallbackContext obj)
     {
-        float actualLevelCd = (1f - (1f - levelUpDashCd));
         if (waitForHold > 0)
         {
-            dash = 2.75f * levelUpDash;
-            dashCd = 3f * (1.5f * actualLevelCd);
+            dash = 2.75f;
+            dashCd = 3f;
         }
         else if (dash < 1.15f)
         {
@@ -202,76 +231,61 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
+
+    private void useProjectileSkill(ProjectileObject po)
+    {
+        Transform target = null;
+        Vector3 targetVector = new Vector3(0, 0);
+
+        if (po.projectileType == ProjectileType.Tracking)
+        {
+            target = getClosestTarget();
+            if (target == null)
+            {
+                return;
+            }
+        }
+
+        if (po.projectileType == ProjectileType.Targeted || po.projectileType == ProjectileType.Pointed)
+        {
+            Plane plane = new Plane(Vector3.up, Vector3.zero);
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            plane.Raycast(ray, out var place);
+            targetVector = ray.GetPoint(place);
+        }
+
+        GameObject bulletToShoot = Instantiate(po.projectileGameObject, gameObject.transform.position, gameObject.transform.rotation);
+        ProjectileBasic projectileStats = bulletToShoot.GetComponent<ProjectileBasic>();
+        projectileStats.setProjectile(po);
+        if (po.projectileType == ProjectileType.Targeted || po.projectileType == ProjectileType.Pointed)
+        {
+            projectileStats.Seek(targetVector);
+        }
+        else if(po.projectileType == ProjectileType.Directional)
+        {
+            projectileStats.Seek(transform);
+        }
+        else projectileStats.Seek(target.transform);
+    }
+
     private void PlayerSkillE_performed(InputAction.CallbackContext obj)
     {
-        // TODO: These numbers from somewhere 
-        float damage = 100f;
-        float explosionRadius = 2f;
-
-        GameObject bulletToShoot = (GameObject)Instantiate(energyBolt, gameObject.transform.position, gameObject.transform.rotation);
-
-        ProjectileBasic projectileStats = bulletToShoot.GetComponent<ProjectileBasic>();
-        projectileStats.setProjectile(Mage1st.FireBall());
-        projectileStats.Seek(FindAnyObjectByType<EnemyStats>().transform);
+        useProjectileSkill(Skill1);
     }
 
     private void PlayerSkillF_performed(InputAction.CallbackContext obj)
     {
-        ProjectileObject po = Mage1st.EnergyBolt();
-        Transform target = null;
-
-        if(po.projectileType == ProjectileType.Tracking)
-        {
-            target = getClosestTarget();
-        }
-
-        // TODO: These numbers from somewhere 
-        float damage = 100f;
-        float explosionRadius = 2f;
-
-        if(target == null)
-        {
-            return;
-        }
-
-        GameObject bulletToShoot = (GameObject)Instantiate(energyBolt, gameObject.transform.position, gameObject.transform.rotation);
-
-        ProjectileBasic projectileStats = bulletToShoot.GetComponent<ProjectileBasic>();
-        projectileStats.setProjectile(Mage1st.EnergyBolt());
-        projectileStats.Seek(target.transform);
+        useProjectileSkill(Skill2);
     }
 
     private void PlayerSkillR_performed(InputAction.CallbackContext obj)
     {
-        // TODO: These numbers from somewhere 
-        float damage = 100f;
-        float explosionRadius = 2f;
-
-        GameObject bulletToShoot = (GameObject)Instantiate(energyBolt, gameObject.transform.position, gameObject.transform.rotation);
-
-        ProjectileBasic projectileStats = bulletToShoot.GetComponent<ProjectileBasic>();
-        projectileStats.setProjectile(Mage1st.ColdBeam());
-        projectileStats.Seek(FindAnyObjectByType<EnemyStats>().transform);
+        useProjectileSkill(Skill3);
     }
 
     private void PlayerSkillG_performed(InputAction.CallbackContext obj)
     {
-        // TODO: These numbers from somewhere 
-        float damage = 100f;
-        float explosionRadius = 2f;
-
-        GameObject bulletToShoot = (GameObject)Instantiate(energyBolt, gameObject.transform.position, gameObject.transform.rotation);
-
-        Plane plane = new Plane(Vector3.up, Vector3.zero);
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        plane.Raycast(ray, out var place);
-        var mouseLoc = ray.GetPoint(place);
-
-        ProjectileBasic projectileStats = bulletToShoot.GetComponent<ProjectileBasic>();
-        projectileStats.setProjectile(Mage1st.HolyArrow());
-        projectileStats.Seek(mouseLoc);
-        //projectileStats.Seek(FindAnyObjectByType<EnemyStats>().transform);
+        useProjectileSkill(Skill4);
     }
 
     private void Update()
@@ -300,7 +314,8 @@ public class PlayerMove : MonoBehaviour
 
         // Movement
         moveDir = playerControls.ReadValue<Vector2>();
-        rb.velocity = new Vector3(moveDir.x * speed * levelUpSpeed * (dash > 1f ? dash : 1), rb.velocity.y, moveDir.y * speed * (dash > 1f ? dash : 1));
+        float dashFinal = dash > 1f ? dash : 1f;
+        rb.velocity = new Vector3(moveDir.x * speed * dashFinal, rb.velocity.y, moveDir.y * speed * dashFinal);
         if (rb.velocity.magnitude != 0)
         {
             var rotation = Quaternion.LookRotation(rb.velocity, transform.up);

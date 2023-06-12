@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3818397256239700823}
   - component: {fileID: 796802858878311477}
-  - component: {fileID: 5872385996477847698}
+  - component: {fileID: 129587698217576793}
   m_Layer: 0
-  m_Name: Orange Mush
-  m_TagString: Untagged
+  m_Name: Orange_Mushroom
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -55,7 +55,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1.16
   m_Center: {x: 0.19, y: 0.97, z: 0}
---- !u!114 &5872385996477847698
+--- !u!114 &129587698217576793
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -67,10 +67,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9b4fc309bb78124b80afe81d0752f19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 80
-  currentHealth: 0
+  maxHealth: 50
   enemyDamage: 10
-  exp: 8
+  speed: 5
+  exp: 0
   mesoDrop: 0
 --- !u!1001 &7052478163579052548
 PrefabInstance:

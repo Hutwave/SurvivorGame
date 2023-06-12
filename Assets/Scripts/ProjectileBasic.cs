@@ -8,7 +8,8 @@ public enum ProjectileType
 {
     Tracking,
     Targeted,
-    Directional
+    Directional,
+    Pointed
 }
 
 public class ProjectileBasic : MonoBehaviour
@@ -31,7 +32,7 @@ public class ProjectileBasic : MonoBehaviour
     internal float range;
     internal float lifeTime;
 
-    private bool targetedHasDirection;
+    private int targetedHasDirection = 5;
 
     public void setProjectile(ProjectileObject obj)
     {
@@ -108,7 +109,7 @@ public class ProjectileBasic : MonoBehaviour
             case ProjectileType.Targeted:
                 
                 Vector3 targetDir = targetVector - transform.position;
-                if (!isExplosive && targetedHasDirection)
+                if (!isExplosive)
                 {
                     targetDir = transform.forward;
                 }
@@ -118,7 +119,6 @@ public class ProjectileBasic : MonoBehaviour
                     HitTarget();
                 }
 
-                targetedHasDirection = false;
                 transform.Translate(targetDir.normalized * distanceThisFrame, Space.World);
                 break;
 
@@ -129,19 +129,31 @@ public class ProjectileBasic : MonoBehaviour
                     Destroy(gameObject);
                 }
 
-                if (target.gameObject.activeInHierarchy)
-                {
-                    HitTarget();
-                }
-
                 Vector3 trackDir = target.transform.position - transform.position;
                 
-                if (trackDir.magnitude <= distanceThisFrame)
+                if (trackDir.magnitude <= distanceThisFrame || trackDir.magnitude > 25)
                 {
                     HitTarget();
                 }
                 transform.Translate(trackDir.normalized * distanceThisFrame, Space.World);
                 break;
+
+            /// POINTED ///
+            case ProjectileType.Pointed:
+                if (targetedHasDirection > 0)
+                {
+                    Vector3 pointDir = targetVector - transform.position;
+                    targetedHasDirection--;
+                    transform.Translate(pointDir.normalized * distanceThisFrame, Space.World);
+                    transform.LookAt(targetVector, Vector3.up);
+                    break;
+                }
+                else
+                {
+                    Vector3 pointDir = transform.forward;
+                    transform.Translate(pointDir * speed * Time.deltaTime, Space.World);
+                    break;
+                }
 
             /// DIRECTIONAL /// 
             case ProjectileType.Directional:
@@ -150,7 +162,6 @@ public class ProjectileBasic : MonoBehaviour
                 break;
         }
     }
-
 
     private void OnCollisionEnter(Collision collision)
     {
