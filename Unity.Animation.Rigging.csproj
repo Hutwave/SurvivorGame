@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{65E0DBE9-0FC7-F6E9-F4C7-92C31873F076}</ProjectGuid>
+    <ProjectGuid>{108394E0-4A10-E259-7838-78CB4DBE8B33}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Unity.Animation.Rigging</AssemblyName>
@@ -775,7 +775,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Unity.Burst.csproj">
-      <Project>{954D0B00-063D-D00D-3929-ABB4D292634A}</Project>
+      <Project>{52DEBFC2-E0C7-42B3-9BE2-043669A5D5E9}</Project>
       <Name>Unity.Burst</Name>
     </ProjectReference>
   </ItemGroup>
