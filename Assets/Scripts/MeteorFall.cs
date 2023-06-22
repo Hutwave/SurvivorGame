@@ -9,12 +9,12 @@ public class MeteorFall : MonoBehaviour
     public float xzChange;
     public Vector3 targetLocation;
     private float speed = 20f;
-    private HazardGen gen;
+    private GameLogic gen;
 
     // Start is called before the first frame update
     void Start()
     {
-        gen = FindObjectOfType<HazardGen>();
+        gen = FindObjectOfType<GameLogic>();
         onceOnly = true;
         targetLocation = new Vector3(transform.position.x - xzChange, transform.position.y - 55f, transform.position.z + Mathf.Abs(xzChange));
     }

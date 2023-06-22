@@ -50,7 +50,6 @@ public enum VictoriaMobNames
     Orange_Mushroom,
     Green_Mushroom,
     Horned_Mushroom
-
 }
 
 // Map jutut kans tänne?

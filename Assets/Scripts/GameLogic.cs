@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class HazardGen : MonoBehaviour
+public class GameLogic : MonoBehaviour
 {
     private int playerLevel;
     private int playerExp;

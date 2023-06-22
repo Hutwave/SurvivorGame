@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3818397256239700823}
   - component: {fileID: 796802858878311477}
   - component: {fileID: 129587698217576793}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Orange_Mushroom
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -49,7 +49,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -135,6 +135,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -5485694786705861885, guid: 94ef145712234514ab8f2ed1d3bb6968,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -5189117655673957966, guid: 94ef145712234514ab8f2ed1d3bb6968,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: -1358614608293661093, guid: 94ef145712234514ab8f2ed1d3bb6968,
         type: 3}
       propertyPath: m_DynamicOccludee
@@ -165,6 +175,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: OrangeMush
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 94ef145712234514ab8f2ed1d3bb6968,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3479024824835519724, guid: 94ef145712234514ab8f2ed1d3bb6968,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5933239547585173923, guid: 94ef145712234514ab8f2ed1d3bb6968,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8316260459656665412, guid: 94ef145712234514ab8f2ed1d3bb6968,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8318563310880301369, guid: 94ef145712234514ab8f2ed1d3bb6968,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8984993540943687686, guid: 94ef145712234514ab8f2ed1d3bb6968,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:

@@ -10,7 +10,7 @@ public class TreeLogic : MonoBehaviour
     void Start()
     {
         hasFallen = false;
-       var gen = FindObjectOfType<HazardGen>();
+       var gen = FindObjectOfType<GameLogic>();
     }
     public void makeFall(Transform trans)
     {

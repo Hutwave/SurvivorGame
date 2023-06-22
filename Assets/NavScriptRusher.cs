@@ -5,12 +5,12 @@ using UnityEngine.AI;
 
 public class MoveDestination : MonoBehaviour
 {
-    public HazardGen haz;
+    public GameLogic haz;
     private Transform targetLoc;
     private NavMeshAgent agent;
     private void Awake()
     {
-        haz = FindObjectOfType<HazardGen>();
+        haz = FindObjectOfType<GameLogic>();
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
     }
     void Update()

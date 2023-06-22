@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -19,6 +20,9 @@ public class ProjectileBasic : MonoBehaviour
     public GameObject explosion;
     internal bool isExplosive;
     internal bool piercing;
+    internal int pierceAmount;
+    internal float colliderSize;
+    Collider[] hitEnemies;
     
     [SerializeReference]
     public ProjectileObject proj;
@@ -37,45 +41,23 @@ public class ProjectileBasic : MonoBehaviour
     public void setProjectile(ProjectileObject obj)
     {
         this.explosion = (GameObject)AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Skills/Small AoE.prefab", typeof(GameObject));
-        if(obj.projectileType != null)
-        {
+
             projectileType = (ProjectileType)obj.projectileType;
-        }
-        
-        if(obj.isExplosive != null)
-        {
+
             isExplosive = (bool)obj.isExplosive;
-        }
-        
-        if(obj.isPiercing != null)
-        {
+
             piercing = (bool)obj.isPiercing;
-        }
 
-        if (obj.damage != null)
-        {
             damage = (float)obj.damage;
-        }
 
-        if (obj.explosionRadius != null)
-        {
             explosionRadius = (float)obj.explosionRadius;
-        }
 
-        if (obj.range != null)
-        {
             range = (float)obj.range;
-        }
 
-        if (obj.lifeTime != null)
-        {
             lifeTime = (float)obj.lifeTime;
-        }
 
-        if (obj.speed != null)
-        {
             speed = (float)obj.speed;
-        }
+        
     }
 
     internal void HitTarget()
@@ -107,19 +89,17 @@ public class ProjectileBasic : MonoBehaviour
         {
             /// TARGETED /// 
             case ProjectileType.Targeted:
-                
                 Vector3 targetDir = targetVector - transform.position;
                 if (!isExplosive)
                 {
                     targetDir = transform.forward;
                 }
-
                 else if (targetDir.magnitude <= distanceThisFrame)
                 {
                     HitTarget();
                 }
-
                 transform.Translate(targetDir.normalized * distanceThisFrame, Space.World);
+                shouldHit();
                 break;
 
             /// TRACKING /// 
@@ -130,11 +110,11 @@ public class ProjectileBasic : MonoBehaviour
                 }
 
                 Vector3 trackDir = target.transform.position - transform.position;
-                
-                if (trackDir.magnitude <= distanceThisFrame || trackDir.magnitude > 25)
+                if (trackDir.magnitude <= distanceThisFrame || trackDir.magnitude > 16f)
                 {
                     HitTarget();
                 }
+                shouldHit();
                 transform.Translate(trackDir.normalized * distanceThisFrame, Space.World);
                 break;
 
@@ -146,39 +126,50 @@ public class ProjectileBasic : MonoBehaviour
                     targetedHasDirection--;
                     transform.Translate(pointDir.normalized * distanceThisFrame, Space.World);
                     transform.LookAt(targetVector, Vector3.up);
-                    break;
+                    shouldHit();
                 }
                 else
                 {
                     Vector3 pointDir = transform.forward;
                     transform.Translate(pointDir * speed * Time.deltaTime, Space.World);
-                    break;
                 }
+                shouldHit();
+                break;
 
             /// DIRECTIONAL /// 
             case ProjectileType.Directional:
                 Vector3 dir = transform.forward;
                 transform.Translate(dir * speed * Time.deltaTime, Space.World);
+                shouldHit();
                 break;
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void shouldHit()
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (piercing)
         {
-            if (!isExplosive)
+            Collider[] newEnemies = Physics.OverlapSphere(transform.position, colliderSize, LayerMask.GetMask("Enemy"));
+            newEnemies = newEnemies.Except(hitEnemies).ToArray();
+            foreach (var newEnemy in newEnemies)
             {
-                collision.gameObject.transform.GetComponent<EnemyStats>().takeDamage(Mathf.RoundToInt(damage));
+                newEnemy.transform.GetComponent<EnemyStats>().takeDamage(Mathf.RoundToInt(damage));
+                pierceAmount--;
+                if (!piercing || pierceAmount < 1)
+                {
+                    HitTarget();
+                    break;
+                }
             }
 
-            if (!piercing)
-            {
-                HitTarget();
-            }
+            hitEnemies = hitEnemies.Concat(newEnemies).ToArray();
+        }
+
+        else if(Physics.CheckSphere(transform.position, colliderSize, LayerMask.GetMask("Enemy")))
+        {
+            HitTarget();
         }
     }
-
 
     /*
    public void addStatus(statusEnums statusEnum, float amount)

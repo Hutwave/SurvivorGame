@@ -18,7 +18,7 @@ public class EnemyStats : MonoBehaviour
 
     private VictoriaMobNames poolKey;
     private Action<EnemyStats, VictoriaMobNames> returnToPool;
-    private HazardGen gameManager;
+    private GameLogic gameLogic;
 
     public void returnToPoolAction(Action<EnemyStats, VictoriaMobNames> action)
     {
@@ -42,7 +42,7 @@ public class EnemyStats : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
-        gameManager = FindAnyObjectByType<HazardGen>();
+        gameLogic = FindAnyObjectByType<GameLogic>();
     }
 
     public void takeDamage(int dmg)
@@ -61,7 +61,7 @@ public class EnemyStats : MonoBehaviour
 
     public void enemyDie()
     {
-        gameManager.getEnemyDrops(new EnemyObject()
+        gameLogic.getEnemyDrops(new EnemyObject()
         {
             exp = this.exp,
             meso = this.mesoDrop

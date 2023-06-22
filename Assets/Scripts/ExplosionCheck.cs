@@ -17,7 +17,7 @@ public class ExplosionCheck : MonoBehaviour
 
     public void Explode()
     {
-        var sphere = Physics.OverlapSphere(this.gameObject.transform.position, radius);
+        var sphere = Physics.OverlapSphere(this.gameObject.transform.position, radius, LayerMask.GetMask("Enemy"));
         foreach (var enemy in sphere)
         {
             if (enemy.gameObject.tag == "Enemy")

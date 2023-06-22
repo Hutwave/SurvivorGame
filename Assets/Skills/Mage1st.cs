@@ -6,7 +6,7 @@ public static class Mage1st
     public static ProjectileObject EnergyBolt()
     {
         var ob = new ProjectileObject();
-        ob.setProj(ProjectileType.Tracking, true, true, 12f);
+        ob.setProj(ProjectileType.Tracking, true, false, 12f);
         ob.projectileGameObject = (GameObject)AssetDatabase.LoadAssetAtPath($"Assets/Prefabs/Skills/EnergyBolt.prefab", typeof(GameObject));
         return ob;
     }
@@ -30,7 +30,7 @@ public static class Mage1st
     public static ProjectileObject ColdBeam()
     {
         var ob = new ProjectileObject();
-        ob.setProj(ProjectileType.Pointed, true, true, 6f);
+        ob.setProj(ProjectileType.Pointed, true, false, 6f);
         ob.projectileGameObject = (GameObject)AssetDatabase.LoadAssetAtPath($"Assets/Prefabs/Skills/EnergyBolt.prefab", typeof(GameObject));
         return ob;
     }

@@ -34,7 +34,8 @@ public class PlayerMove : MonoBehaviour
     public int maxHealth = 100;
     public int currentHealth;
     public HealthBar healthBar;
-    private HazardGen gameManager;
+    private GameLogic gameLogic;
+    private PlayerStats playerStats;
 
 
     private float dash = 1f;
@@ -51,7 +52,7 @@ public class PlayerMove : MonoBehaviour
 
     void Start()
     {
-        gameManager = FindAnyObjectByType<HazardGen>();
+        gameLogic = FindAnyObjectByType<GameLogic>();
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
         Skill1 = Mage1st.ColdBeam();
@@ -153,7 +154,7 @@ public class PlayerMove : MonoBehaviour
         float closestDist = 100000f;
 
         List<EnemyStats> enemyList = new List<EnemyStats>();
-        var tempEnemyList = Physics.OverlapSphere(transform.position, 10f);
+        var tempEnemyList = Physics.OverlapSphere(transform.position, 8f, LayerMask.GetMask("Enemy"));
         tempEnemyList = tempEnemyList.Where(x => x.transform.TryGetComponent<EnemyStats>(out _)).ToArray();
 
         if (tempEnemyList.Length > 0)
@@ -165,7 +166,7 @@ public class PlayerMove : MonoBehaviour
         }
         else
         {
-            tempEnemyList = Physics.OverlapSphere(transform.position, 20f);
+            tempEnemyList = Physics.OverlapSphere(transform.position, 16f, LayerMask.GetMask("Enemy"));
             tempEnemyList = tempEnemyList.Where(x => x.transform.TryGetComponent<EnemyStats>(out _)).ToArray();
             if (tempEnemyList.Length > 0)
             {
@@ -254,6 +255,7 @@ public class PlayerMove : MonoBehaviour
             targetVector = ray.GetPoint(place);
         }
 
+        po.damage = Mathf.RoundToInt(po.damage + playerStats.GetTotalInt() + playerStats.GetTotalAtt());
         GameObject bulletToShoot = Instantiate(po.projectileGameObject, gameObject.transform.position, gameObject.transform.rotation);
         ProjectileBasic projectileStats = bulletToShoot.GetComponent<ProjectileBasic>();
         projectileStats.setProjectile(po);

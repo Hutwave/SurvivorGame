@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class goalTrigger : MonoBehaviour
 {
-    private HazardGen rngGen;
+    private GameLogic rngGen;
     // Start is called before the first frame update
 
     private void Start()
     {
-        rngGen= FindObjectOfType<HazardGen>();
+        rngGen= FindObjectOfType<GameLogic>();
     }
     private void OnTriggerEnter(Collider other)
     {
