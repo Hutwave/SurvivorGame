@@ -11,7 +11,6 @@ public class DamageSkin : MonoBehaviour
     void Start()
     {
         textMesh = transform.GetComponent<TextMeshPro>();
-
     }
 
     // Update is called once per frame
