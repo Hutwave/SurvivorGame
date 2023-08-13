@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 using System.Linq;
 using System.Collections.Generic;
 
+
 public class PlayerMove : MonoBehaviour
 {
     public float speed = 5f;
@@ -26,6 +27,12 @@ public class PlayerMove : MonoBehaviour
     private ProjectileObject Skill2;
     private ProjectileObject Skill3;
     private ProjectileObject Skill4;
+
+    public Vector3 Cam1;
+    public Vector3 Cam2;
+    public Vector3 Cam3;
+    private CinemachineVirtualCamera vcam;
+    private CinemachineTransposer transposer;
 
     private float waitForHold;
 
@@ -52,6 +59,8 @@ public class PlayerMove : MonoBehaviour
 
     void Start()
     {
+        vcam = FindObjectOfType<Cinemachine.CinemachineVirtualCamera>();
+        transposer = vcam.GetCinemachineComponent<CinemachineTransposer>();
         gameLogic = FindAnyObjectByType<GameLogic>();
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
@@ -292,6 +301,15 @@ public class PlayerMove : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown("7")){
+           transposer.m_FollowOffset = Cam1;
+        }
+        if (Input.GetKeyDown("8")){
+           transposer.m_FollowOffset = Cam2;
+        }
+        if (Input.GetKeyDown("9")){
+           transposer.m_FollowOffset = Cam3;
+        }
         // Check for dash cooldown effect
 
         if (dashCd > -0.1f)
