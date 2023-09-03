@@ -899,6 +899,10 @@
       <Project>{4DC9BDD8-A969-9705-5034-ED65B503F821}</Project>
       <Name>Unity.PlasticSCM.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.ProBuilder.csproj">
+      <Project>{81922578-DE55-1A0B-C083-816E614815DA}</Project>
+      <Name>Unity.ProBuilder</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.Animation.Rigging.Editor.csproj">
       <Project>{FA5D8F34-5962-C11A-1D85-06D8CA379AEE}</Project>
       <Name>Unity.Animation.Rigging.Editor</Name>
@@ -927,6 +931,10 @@
       <Project>{41849ADF-9AA6-80FF-07EA-A7742BAE61BE}</Project>
       <Name>Unity.Rider.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.ProBuilder.AddOns.Editor.csproj">
+      <Project>{1DB75889-7558-1EFC-D52B-0BCBCDEA5A79}</Project>
+      <Name>Unity.ProBuilder.AddOns.Editor</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.VisualScripting.Flow.csproj">
       <Project>{5A9148A9-4F20-287E-5C82-AB8FBA83D02D}</Project>
       <Name>Unity.VisualScripting.Flow</Name>
@@ -946,6 +954,10 @@
     <ProjectReference Include="Unity.InputSystem.csproj">
       <Project>{771D757E-DA62-4D4F-E378-0CD33BD5BAB3}</Project>
       <Name>Unity.InputSystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.ProBuilder.Editor.csproj">
+      <Project>{7DBDA409-7E60-E59C-059C-768655737F3A}</Project>
+      <Name>Unity.ProBuilder.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.VisualScripting.SettingsProvider.Editor.csproj">
       <Project>{E7AD19B7-EF0A-6FFB-8ABD-87D1C0545F7B}</Project>
@@ -978,6 +990,10 @@
     <ProjectReference Include="Unity.AI.Navigation.Editor.csproj">
       <Project>{FDCDF310-C55B-685D-5EF0-5C871C0FDC81}</Project>
       <Name>Unity.AI.Navigation.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.ProBuilder.AssetIdRemapUtility.csproj">
+      <Project>{15324CB0-4570-A766-9787-E5ED1BF40FF7}</Project>
+      <Name>Unity.ProBuilder.AssetIdRemapUtility</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.VisualScripting.State.csproj">
       <Project>{818A410B-472B-67FD-7A4B-4EBBEF1859C5}</Project>

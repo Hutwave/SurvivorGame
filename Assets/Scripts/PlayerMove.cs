@@ -35,15 +35,8 @@ public class PlayerMove : MonoBehaviour
     private CinemachineTransposer transposer;
 
     private float waitForHold;
-
-    private bool canDie;
-
-    public int maxHealth = 100;
-    public int currentHealth;
-    public HealthBar healthBar;
     private GameLogic gameLogic;
     private PlayerStats playerStats;
-
 
     private float dash = 1f;
     private float dashCd = 1f;
@@ -62,59 +55,19 @@ public class PlayerMove : MonoBehaviour
         vcam = FindObjectOfType<Cinemachine.CinemachineVirtualCamera>();
         transposer = vcam.GetCinemachineComponent<CinemachineTransposer>();
         gameLogic = FindAnyObjectByType<GameLogic>();
-        currentHealth = maxHealth;
-        healthBar.SetMaxHealth(maxHealth);
         Skill1 = Mage1st.ColdBeam();
         Skill2 = Mage1st.EnergyBolt();
         Skill3 = Mage1st.FireBall();
         Skill4 = Mage1st.HolyArrow();
-
-    }
-
-    public void takeDamage(int damage)
-    {
-        currentHealth -= damage;
-
-        healthBar.SetHealth(currentHealth);
-        gameOver();
-    }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        try
-        {
-            if (collision.collider.gameObject.CompareTag("Enemy"))
-            {
-                takeDamage(collision.collider.gameObject.GetComponent<EnemyStats>().enemyDamage);
-            }
-        }
-
-        catch
-        {
-            // Name of object which is enemy but no enemyStats
-            Debug.LogWarning(collision.collider.gameObject.name);
-        }
-    }
-
-    public void cantDie()
-    {
-        canDie = false;
-    }
-
-    private void gameOver()
-    {
-        if (canDie && currentHealth < 0f)
-        {
-
-        }
+        PlayerStats tempStats = new PlayerStats();
+        playerStats = tempStats;
+        playerStats.InitializeNewPlayer(PlayerClass.Magician);
     }
 
     // Assign inputs for player
     private void Awake()
     {
-        healthBar = FindAnyObjectByType<HealthBar>();
         playerInputs = new PlayerInputActions();
-        canDie = true;
     }
 
     // Assign controls on player spawn
@@ -264,7 +217,7 @@ public class PlayerMove : MonoBehaviour
             targetVector = ray.GetPoint(place);
         }
 
-        po.damage = Mathf.RoundToInt(po.damage + playerStats.GetTotalInt() + playerStats.GetTotalAtt());
+        po.damage = Mathf.RoundToInt(po.baseDamage + playerStats.GetTotalInt() + playerStats.GetTotalAtt());
         GameObject bulletToShoot = Instantiate(po.projectileGameObject, gameObject.transform.position, gameObject.transform.rotation);
         ProjectileBasic projectileStats = bulletToShoot.GetComponent<ProjectileBasic>();
         projectileStats.setProjectile(po);
@@ -272,7 +225,7 @@ public class PlayerMove : MonoBehaviour
         {
             projectileStats.Seek(targetVector);
         }
-        else if(po.projectileType == ProjectileType.Directional)
+        else if (po.projectileType == ProjectileType.Directional)
         {
             projectileStats.Seek(transform);
         }

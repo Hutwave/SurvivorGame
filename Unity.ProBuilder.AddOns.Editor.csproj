@@ -9,10 +9,10 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{DDA68E93-D643-D7C8-3A29-B77ADC5767FB}</ProjectGuid>
+    <ProjectGuid>{1DB75889-7558-1EFC-D52B-0BCBCDEA5A79}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>Unity.Burst.Editor</AssemblyName>
+    <AssemblyName>Unity.ProBuilder.AddOns.Editor</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BaseDirectory>.</BaseDirectory>
@@ -26,7 +26,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169</NoWarn>
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,7 +35,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169</NoWarn>
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <NoConfig>true</NoConfig>
@@ -58,28 +58,10 @@
     <Analyzer Include="C:\Software\Unity\Hub\2020.3.33f1\Editor\2022.2.19f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Library\PackageCache\com.unity.burst@1.8.4\Editor\BurstInspectorGUI.cs" />
-    <Compile Include="Library\PackageCache\com.unity.burst@1.8.4\Editor\BurstDisassembler.Core.Wasm.cs" />
-    <Compile Include="Library\PackageCache\com.unity.burst@1.8.4\Editor\BurstDisassembler.Core.LLVMIR.info.cs" />
-    <Compile Include="Library\PackageCache\com.unity.burst@1.8.4\Editor\BurstDisassembler.Core.LLVMIR.cs" />
-    <Compile Include="Library\PackageCache\com.unity.burst@1.8.4\Editor\BurstDisassembler.Core.ARM64.info.cs" />
-    <Compile Include="Library\PackageCache\com.unity.burst@1.8.4\Editor\LongTextArea.cs" />
-    <Compile Include="Library\PackageCache\com.unity.burst@1.8.4\Editor\BurstDisassembler.Core.ARM64.cs" />
-    <Compile Include="Library\PackageCache\com.unity.burst@1.8.4\Editor\BurstStringSearch.cs" />
-    <Compile Include="Library\PackageCache\com.unity.burst@1.8.4\Editor\BurstDisassembler.Core.Wasm.info.cs" />
-    <Compile Include="Library\PackageCache\com.unity.burst@1.8.4\Editor\BurstDisassembler.Core.x86.cs" />
-    <Compile Include="Library\PackageCache\com.unity.burst@1.8.4\Editor\BurstAotCompiler.cs" />
-    <Compile Include="Library\PackageCache\com.unity.burst@1.8.4\Editor\BurstLoader.cs" />
-    <Compile Include="Library\PackageCache\com.unity.burst@1.8.4\Editor\LabeledPopup.cs" />
-    <Compile Include="Library\PackageCache\com.unity.burst@1.8.4\Editor\BurstDisassembler.Core.cs" />
-    <Compile Include="Library\PackageCache\com.unity.burst@1.8.4\Editor\BurstDisassembler.cs" />
-    <Compile Include="Library\PackageCache\com.unity.burst@1.8.4\Editor\BurstDisassembler.Core.x86.info.cs" />
-    <Compile Include="Library\PackageCache\com.unity.burst@1.8.4\Editor\BurstMath.cs" />
-    <Compile Include="Library\PackageCache\com.unity.burst@1.8.4\Editor\BurstAotSettings.cs" />
-    <Compile Include="Library\PackageCache\com.unity.burst@1.8.4\Editor\BurstMenu.cs" />
+    <Compile Include="Library\PackageCache\com.unity.probuilder@5.0.7\Addons\Fbx.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Library\PackageCache\com.unity.burst@1.8.4\Editor\Unity.Burst.Editor.asmdef" />
+    <None Include="Library\PackageCache\com.unity.probuilder@5.0.7\Addons\Unity.ProBuilder.AddOns.Editor.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -750,9 +732,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Unity.Burst.csproj">
-      <Project>{52DEBFC2-E0C7-42B3-9BE2-043669A5D5E9}</Project>
-      <Name>Unity.Burst</Name>
+    <ProjectReference Include="Unity.ProBuilder.csproj">
+      <Project>{81922578-DE55-1A0B-C083-816E614815DA}</Project>
+      <Name>Unity.ProBuilder</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.ProBuilder.Editor.csproj">
+      <Project>{7DBDA409-7E60-E59C-059C-768655737F3A}</Project>
+      <Name>Unity.ProBuilder.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="UnityEditor.TestRunner.csproj">
       <Project>{81301705-A6A4-3218-0AF7-1EC7935AF6D6}</Project>

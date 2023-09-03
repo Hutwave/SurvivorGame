@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
+using Cinemachine;
 
 public class GameLogic : MonoBehaviour
 {
@@ -27,6 +28,13 @@ public class GameLogic : MonoBehaviour
 
     private List<GameObject> hazards = new List<GameObject>();
     private ExpBar expBar;
+    private HealthBar healthBar;
+
+    private bool canDie;
+
+
+    public int maxHealth = 100;
+    public int currentHealth;
 
     private List<GameObject> trees = new List<GameObject>();
     private int levelNumber;
@@ -40,6 +48,8 @@ public class GameLogic : MonoBehaviour
     float levelUpRng;
     float cameraFov;
 
+    private Cinemachine.CinemachineVirtualCamera asd;
+
     private int playerExpNeededToLevel;
 
     private int valueForReducingLoad = 5;
@@ -50,7 +60,6 @@ public class GameLogic : MonoBehaviour
 
     bool initialized;
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -58,10 +67,14 @@ public class GameLogic : MonoBehaviour
         treeFolder = new GameObject("GeneratedTrees");
         generatedFolder = new GameObject("GeneratedFolder");
         expBar = FindAnyObjectByType<ExpBar>();
+        healthBar = FindAnyObjectByType<HealthBar>();
 
         levelNumber = 1;
         newLevel();
         initializeThings(levelNumber);
+
+        currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
 
         RenderSettings.fogStartDistance = -100f;
         RenderSettings.fogEndDistance = 180f;
@@ -72,7 +85,27 @@ public class GameLogic : MonoBehaviour
         cameraFov = 22f;
         minCd = 1f;
         maxCd = 2f;
+    }
 
+    public void cantDie()
+    {
+        canDie = false;
+    }
+
+    private void gameOver()
+    {
+        if (canDie && currentHealth < 0f)
+        {
+            // tähän game over!
+        }
+    }
+
+    public void takeDamage(int damage)
+    {
+        currentHealth -= damage;
+
+        healthBar.SetHealth(currentHealth);
+        gameOver();
     }
 
     public GameObject getPlayer()
@@ -83,6 +116,7 @@ public class GameLogic : MonoBehaviour
 
     public void initializeThings(int levelNum)
     {
+        canDie = true;
         if (playerLevel < 1)
         {
             playerLevel = 1;
@@ -92,7 +126,6 @@ public class GameLogic : MonoBehaviour
             tempPool.Clear();
         }
         enemyPools.Clear();
-
 
         switch (levelNum)
         {
@@ -143,7 +176,7 @@ public class GameLogic : MonoBehaviour
         {
             uiObject.SetActive(true);
             var playerComp = playerInstance.GetComponent<PlayerMove>();
-            playerComp.cantDie();
+            cantDie();
             levelComplete = true;
         }
     }

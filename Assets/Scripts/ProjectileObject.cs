@@ -9,6 +9,7 @@ public class ProjectileObject
     public bool isPiercing;
 
     public float damage;
+    public float baseDamage;
     public float explosionRadius;
     public float range;
     public float lifeTime;
@@ -22,6 +23,7 @@ public class ProjectileObject
         isExplosive = false;
         isPiercing = false;
         damage = 1f;
+        baseDamage = 1f;
         explosionRadius = 0f;
         range = 100f;
         lifeTime = 5f;
@@ -29,12 +31,12 @@ public class ProjectileObject
 
     }
 
-    public ProjectileObject(ProjectileType ptype, bool explode, bool pierce, float dmg, float explodeRad, float rang, float lt, float spd)
+    public ProjectileObject(ProjectileType ptype, bool explode, bool pierce, float baseDmg, float explodeRad, float rang, float lt, float spd)
     {
         projectileType = ptype;
         isExplosive = explode;
         isPiercing = pierce;
-        damage = dmg;
+        baseDamage = baseDmg;
         explosionRadius = explodeRad;
         range = rang;
         lifeTime = lt;

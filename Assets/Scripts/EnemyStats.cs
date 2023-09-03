@@ -33,6 +33,11 @@ public class EnemyStats : MonoBehaviour
         mesoDrop = obj.meso;
     }
 
+    public void damagePlayer()
+    {
+        gameLogic.takeDamage(enemyDamage);
+    }
+
     public void setPool(VictoriaMobNames setPool)
     {
         poolKey = setPool;

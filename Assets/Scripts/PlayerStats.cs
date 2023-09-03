@@ -81,33 +81,34 @@ public class PlayerStats : MonoBehaviour
         calculateStats();
     }
 
+
     public void calculateStats()
     {
 
     }
     public int GetTotalStr()
     {
-        return Mathf.RoundToInt(strength * (1 + (0.01f * (allStatPerc + strPerc))));
+        return Mathf.RoundToInt(strength * (1f + (0.01f * (allStatPerc + strPerc))));
     }
 
     public int GetTotalDex()
     {
-        return Mathf.RoundToInt(dexterity * (1 + (0.01f * (allStatPerc + dexPerc))));
+        return Mathf.RoundToInt(dexterity * (1f + (0.01f * (allStatPerc + dexPerc))));
     }
 
     public int GetTotalInt()
     {
-        return Mathf.RoundToInt(intelligence * (1 + (0.01f * (allStatPerc + intPerc))));
+        return Mathf.RoundToInt(intelligence * (1f + (0.01f * (allStatPerc + intPerc))));
     }
 
     public int GetTotalAtt()
     {
-        return Mathf.RoundToInt(attack * (1 + (0.01f * attPerc)));
+        return Mathf.RoundToInt(attack * (1f + (0.01f * attPerc)));
     }
 
     public int GetTotalArmor()
     {
-        return Mathf.RoundToInt(armor * (1 + (0.01f * armorPerc)));
+        return Mathf.RoundToInt(armor * (1f + (0.01f * armorPerc)));
     }
 
 }

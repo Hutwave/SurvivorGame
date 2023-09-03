@@ -89,7 +89,8 @@ public class ProjectileBasic : MonoBehaviour
         {
             /// TARGETED /// 
             case ProjectileType.Targeted:
-                Vector3 targetDir = targetVector - transform.position;
+                // MAAN ALLE
+                Vector3 targetDir = new Vector3(targetVector.x, 0.5f, targetVector.z) - transform.position;
                 if (!isExplosive)
                 {
                     targetDir = transform.forward;
@@ -98,7 +99,8 @@ public class ProjectileBasic : MonoBehaviour
                 {
                     HitTarget();
                 }
-                transform.Translate(targetDir.normalized * distanceThisFrame, Space.World);
+                Vector3 targetti = new Vector3(targetDir.normalized.x, 0f, targetDir.normalized.z);
+                transform.Translate(targetti * distanceThisFrame, Space.World);
                 shouldHit();
                 break;
 
@@ -120,17 +122,19 @@ public class ProjectileBasic : MonoBehaviour
 
             /// POINTED ///
             case ProjectileType.Pointed:
+                // MAAN ALLE
                 if (targetedHasDirection > 0)
                 {
-                    Vector3 pointDir = targetVector - transform.position;
+                    Vector3 pointDir = new Vector3(targetVector.x, 0.5f, targetVector.z) - transform.position;
                     targetedHasDirection--;
+                    Vector3 targetti2 = new Vector3(pointDir.normalized.x, 0f, pointDir.normalized.z);
                     transform.Translate(pointDir.normalized * distanceThisFrame, Space.World);
                     transform.LookAt(targetVector, Vector3.up);
                     shouldHit();
                 }
                 else
                 {
-                    Vector3 pointDir = transform.forward;
+                    Vector3 pointDir = new Vector3(transform.forward.x, 0f, transform.forward.z);
                     transform.Translate(pointDir * speed * Time.deltaTime, Space.World);
                 }
                 shouldHit();
