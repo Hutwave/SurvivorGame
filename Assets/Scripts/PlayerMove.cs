@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Linq;
 using System.Collections.Generic;
-
+using UnityEditor;
 
 public class PlayerMove : MonoBehaviour
 {
@@ -25,7 +25,7 @@ public class PlayerMove : MonoBehaviour
 
     private ProjectileObject Skill1;
     private ProjectileObject Skill2;
-    private ProjectileObject Skill3;
+    private Skill Skill3;
     private ProjectileObject Skill4;
 
     public Vector3 Cam1;
@@ -55,12 +55,12 @@ public class PlayerMove : MonoBehaviour
         vcam = FindObjectOfType<Cinemachine.CinemachineVirtualCamera>();
         transposer = vcam.GetCinemachineComponent<CinemachineTransposer>();
         gameLogic = FindAnyObjectByType<GameLogic>();
-        Skill1 = Mage1st.ColdBeam();
-        Skill2 = Mage1st.EnergyBolt();
-        Skill3 = Mage1st.FireBall();
-        Skill4 = Mage1st.HolyArrow();
-        PlayerStats tempStats = new PlayerStats();
-        playerStats = tempStats;
+        Skill1 = Mage1st.EnergyBolt();
+        Skill2 = Mage1st.ChainLightning();
+        Skill3 = Mage1st.Explosion();
+        Skill4 = Mage1st.FireBall();
+
+        playerStats = new PlayerStats();
         playerStats.InitializeNewPlayer(PlayerClass.Magician);
     }
 
@@ -110,13 +110,65 @@ public class PlayerMove : MonoBehaviour
         FindObjectOfType<CinemachineVirtualCamera>().m_Lens.FieldOfView = fov > 18f ? fov : 18f;
     }
 
-    public Transform getClosestTarget()
+    public Transform getRandomTarget(Vector3 location, float radius, bool random, List<Transform> ignore)
     {
         Transform target = null;
         float closestDist = 100000f;
 
         List<EnemyStats> enemyList = new List<EnemyStats>();
-        var tempEnemyList = Physics.OverlapSphere(transform.position, 8f, LayerMask.GetMask("Enemy"));
+        var tempEnemyList = Physics.OverlapSphere(location, radius, LayerMask.GetMask("Enemy"));
+        tempEnemyList = tempEnemyList.Where(x => x.transform.TryGetComponent<EnemyStats>(out _)).ToArray();
+
+        if (tempEnemyList.Length > 0)
+        {
+            foreach (var foundEnemy in tempEnemyList)
+            {
+                if (!ignore.Contains(foundEnemy.transform))
+                {
+                    enemyList.Add(foundEnemy.transform.GetComponent<EnemyStats>());
+                }
+            }
+        }
+
+        if (enemyList == null || enemyList.Count == 0)
+        {
+            return null;
+        }
+
+        if (random)
+        {
+            return enemyList[Random.Range(0, enemyList.Count - 1)].transform;
+        }
+
+        foreach (var enem in enemyList)
+        {
+            if (enem.CompareTag("Enemy"))
+                try
+                {
+                    Vector3 dirr = enem.transform.position - location;
+                    float dist = dirr.sqrMagnitude;
+                    if (dist < closestDist)
+                    {
+                        target = enem.transform;
+                        closestDist = dist;
+                    }
+                }
+                catch
+                {
+                    Destroy(this);
+                }
+        }
+
+        return target;
+    }
+
+    public Transform getClosestTarget(Vector3 location)
+    {
+        Transform target = null;
+        float closestDist = 100000f;
+
+        List<EnemyStats> enemyList = new List<EnemyStats>();
+        var tempEnemyList = Physics.OverlapSphere(location, 8f, LayerMask.GetMask("Enemy"));
         tempEnemyList = tempEnemyList.Where(x => x.transform.TryGetComponent<EnemyStats>(out _)).ToArray();
 
         if (tempEnemyList.Length > 0)
@@ -128,7 +180,7 @@ public class PlayerMove : MonoBehaviour
         }
         else
         {
-            tempEnemyList = Physics.OverlapSphere(transform.position, 16f, LayerMask.GetMask("Enemy"));
+            tempEnemyList = Physics.OverlapSphere(location, 16f, LayerMask.GetMask("Enemy"));
             tempEnemyList = tempEnemyList.Where(x => x.transform.TryGetComponent<EnemyStats>(out _)).ToArray();
             if (tempEnemyList.Length > 0)
             {
@@ -149,7 +201,7 @@ public class PlayerMove : MonoBehaviour
             if (enem.CompareTag("Enemy"))
                 try
                 {
-                    Vector3 dirr = enem.transform.position - transform.position;
+                    Vector3 dirr = enem.transform.position - location;
                     float dist = dirr.sqrMagnitude;
                     if (dist < closestDist)
                     {
@@ -194,28 +246,71 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
+    private void useArcSkill(ArcSkill arcSkill)
+    {
+        if(arcSkill.attackArc == 360)
+        {
+            
+            GameObject arcExplosion = (GameObject)AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Skills/Mage/Explosion.prefab", typeof(GameObject));
+            var explosionObject = Instantiate(arcExplosion, transform.position, Quaternion.identity);
+            explosionObject.GetComponent<ExplosionCheck>().setDmg(arcSkill.damage, arcSkill.attackRange);
+        }
+    }
 
     private void useProjectileSkill(ProjectileObject po)
     {
         Transform target = null;
         Vector3 targetVector = new Vector3(0, 0);
-
+        Debug.LogError(po.projectileType);
         if (po.projectileType == ProjectileType.Tracking)
         {
-            target = getClosestTarget();
+            target = getClosestTarget(transform.position);
             if (target == null)
             {
                 return;
             }
         }
 
-        if (po.projectileType == ProjectileType.Targeted || po.projectileType == ProjectileType.Pointed)
+        if (po.projectileType == ProjectileType.Targeted || po.projectileType == ProjectileType.Pointed || po.projectileType == ProjectileType.Chain)
         {
             Plane plane = new Plane(Vector3.up, Vector3.zero);
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             plane.Raycast(ray, out var place);
             targetVector = ray.GetPoint(place);
         }
+
+
+        if (po.projectileType == ProjectileType.Chain)
+        {
+            target = getClosestTarget(targetVector);
+            Debug.LogError("AA!!!!!!");
+            List<Transform> enemiesHit = new List<Transform>();
+            if(target != null)
+            {
+                enemiesHit.Add(target);
+            }
+            Debug.LogError("BB " + enemiesHit.Count);
+            for (int i = 0; i < po.pierceCount; i++)
+            {
+                Transform tempEnemy = getRandomTarget(enemiesHit.Last().position, po.range, true, enemiesHit);
+                if(tempEnemy != null)
+                {
+                    enemiesHit.Add(tempEnemy);
+                }
+            }
+            Debug.LogError("AA " + enemiesHit.Count);
+            /*enemiesHit.ForEach(oneEnemy =>
+            {
+                oneEnemy.GetComponent<EnemyStats>().takeDamage(Mathf.RoundToInt(po.damage));
+            });
+            */
+            GameObject chainBullet = Instantiate(po.projectileGameObject, enemiesHit.First().position, transform.rotation);
+            ProjectileBasic chainStats = chainBullet.GetComponent<ProjectileBasic>();
+            chainStats.setProjectile(po, enemiesHit);
+            return;
+        }
+
+
 
         po.damage = Mathf.RoundToInt(po.baseDamage + playerStats.GetTotalInt() + playerStats.GetTotalAtt());
         GameObject bulletToShoot = Instantiate(po.projectileGameObject, gameObject.transform.position, gameObject.transform.rotation);
@@ -244,7 +339,7 @@ public class PlayerMove : MonoBehaviour
 
     private void PlayerSkillR_performed(InputAction.CallbackContext obj)
     {
-        useProjectileSkill(Skill3);
+        useArcSkill(Skill3 as ArcSkill);
     }
 
     private void PlayerSkillG_performed(InputAction.CallbackContext obj)

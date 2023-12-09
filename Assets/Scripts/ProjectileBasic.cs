@@ -10,7 +10,8 @@ public enum ProjectileType
     Tracking,
     Targeted,
     Directional,
-    Pointed
+    Pointed,
+    Chain
 }
 
 public class ProjectileBasic : MonoBehaviour
@@ -20,13 +21,15 @@ public class ProjectileBasic : MonoBehaviour
     public GameObject explosion;
     internal bool isExplosive;
     internal bool piercing;
+    internal bool chainLightning = false;
     internal int pierceAmount;
     internal float colliderSize;
     Collider[] hitEnemies;
-    
+    List<Transform> enemiesTargeted;
+
     [SerializeReference]
     public ProjectileObject proj;
-    
+
 
     internal Transform target;
     internal Vector3 targetVector;
@@ -35,39 +38,69 @@ public class ProjectileBasic : MonoBehaviour
 
     internal float range;
     internal float lifeTime;
+    internal int currentTargetNum;
+    internal float waitForDeath;
 
     private int targetedHasDirection = 5;
 
-    public void setProjectile(ProjectileObject obj)
+    public void setProjectile(ProjectileObject obj, List<Transform> targetEnemies = null)
     {
         this.explosion = (GameObject)AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Skills/Small AoE.prefab", typeof(GameObject));
 
-            projectileType = (ProjectileType)obj.projectileType;
+        projectileType = (ProjectileType)obj.projectileType;
 
-            isExplosive = (bool)obj.isExplosive;
+        isExplosive = (bool)obj.isExplosive;
 
-            piercing = (bool)obj.isPiercing;
+        piercing = (bool)obj.isPiercing;
 
-            damage = (float)obj.damage;
+        damage = (float)obj.damage;
 
-            explosionRadius = (float)obj.explosionRadius;
+        explosionRadius = (float)obj.explosionRadius;
 
-            range = (float)obj.range;
+        range = (float)obj.range;
 
-            lifeTime = (float)obj.lifeTime;
+        lifeTime = (float)obj.lifeTime;
 
-            speed = (float)obj.speed;
-        
+        speed = (float)obj.speed;
+
+        if (targetEnemies != null)
+        {
+            enemiesTargeted = targetEnemies;
+            currentTargetNum = 0;
+        }
+
     }
 
-    internal void HitTarget()
+    internal void HitTarget(Vector3? enemyPos = null)
     {
+        Vector3 enemyLocation = Vector3.zero;
+        if(enemyPos != null)
+        {
+            enemyLocation = (Vector3)enemyPos;
+        }
         if (isExplosive)
         {
             var explosionObject = Instantiate(explosion, transform.position, Quaternion.identity);
             explosionObject.GetComponent<ExplosionCheck>().setDmg(damage, explosionRadius);
         }
-        
+
+        if (projectileType == ProjectileType.Chain)
+        {
+            var explosionObject = Instantiate(explosion, enemyLocation != Vector3.zero ? enemyLocation : transform.position, Quaternion.identity);
+            explosionObject.GetComponent<ExplosionCheck>().setDmg(damage, explosionRadius);
+            if (enemiesTargeted.Count - 1 > currentTargetNum)
+            {
+                currentTargetNum++;
+                return;
+            }
+            else
+            {
+                currentTargetNum = -1;
+                waitForDeath = 2f;
+                return;
+            }
+        }
+
         Destroy(this.gameObject);
         return;
     }
@@ -82,9 +115,16 @@ public class ProjectileBasic : MonoBehaviour
         target = _target;
     }
 
+    public void isChainLightning(int amount)
+    {
+        chainLightning = true;
+
+    }
+
     public void Update()
     {
         float distanceThisFrame = speed * Time.deltaTime;
+
         switch (projectileType)
         {
             /// TARGETED /// 
@@ -146,6 +186,31 @@ public class ProjectileBasic : MonoBehaviour
                 transform.Translate(dir * speed * Time.deltaTime, Space.World);
                 shouldHit();
                 break;
+
+            /// CHAIN ///
+            case ProjectileType.Chain:
+                if (currentTargetNum == -1)
+                {
+                    waitForDeath -= Time.deltaTime;
+                    if (waitForDeath < 0f)
+                    {
+                        Destroy(gameObject);
+                    }
+                    break;
+                }
+                Vector3 currentTarget = enemiesTargeted[currentTargetNum].transform.position - transform.position;
+                if (currentTargetNum == 0)
+                {
+                    HitTarget(enemiesTargeted[currentTargetNum].transform.position);
+                    currentTarget = enemiesTargeted[1].transform.position - transform.position;
+                }
+                transform.Translate(currentTarget.normalized * distanceThisFrame, Space.World);
+                float aaa = currentTarget.magnitude;
+                if (aaa < 0.5f)
+                {
+                    HitTarget(enemiesTargeted[currentTargetNum].transform.position);
+                }
+                break;
         }
     }
 
@@ -169,7 +234,7 @@ public class ProjectileBasic : MonoBehaviour
             hitEnemies = hitEnemies.Concat(newEnemies).ToArray();
         }
 
-        else if(Physics.CheckSphere(transform.position, colliderSize, LayerMask.GetMask("Enemy")))
+        else if (Physics.CheckSphere(transform.position, colliderSize, LayerMask.GetMask("Enemy")))
         {
             HitTarget();
         }

@@ -15,6 +15,8 @@ public class ProjectileObject
     public float lifeTime;
     public float speed;
 
+    public int pierceCount;
+
     public GameObject projectileGameObject;
 
     public ProjectileObject()
@@ -43,7 +45,7 @@ public class ProjectileObject
         speed = spd;
     }
 
-    public void setProj(ProjectileType ptype, bool explode, bool pierce, float dmg)
+    public void setProj(ProjectileType ptype, bool explode, bool pierce, float dmg, int pierceCount = 1, float radius = 10f)
     {
         switch (ptype)
         {
@@ -58,6 +60,9 @@ public class ProjectileObject
                 break;
             case ProjectileType.Pointed:
                 DefaultPointed(explode, pierce, dmg);
+                break;
+            case ProjectileType.Chain:
+                DefaultChain(pierceCount, radius, dmg);
                 break;
         }
     }
@@ -110,5 +115,19 @@ public class ProjectileObject
         range = 100f;
         lifeTime = 5f;
         speed = 8f;
+    }
+
+    public void DefaultChain(int pierce, float newRadius, float dmg)
+    {
+        projectileType = ProjectileType.Chain;
+        isExplosive = false;
+        isPiercing = true;
+        damage = dmg;
+        explosionRadius = 0.1f;
+        range = 16f;
+        lifeTime = 5f;
+        speed = 60f;
+        pierceCount = pierce-1;
+        explosionRadius = newRadius;
     }
 }

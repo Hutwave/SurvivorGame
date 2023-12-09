@@ -24,7 +24,7 @@ public class MageSkills
         tempSkill.manaCost = 20f;
 
         ob.setProj(ProjectileType.Targeted, true, false, tempSkill.damage);
-        ob.projectileGameObject = (GameObject)AssetDatabase.LoadAssetAtPath($"Assets/Prefabs/Skills/EnergyBolt.prefab", typeof(GameObject));
+        ob.projectileGameObject = (GameObject)AssetDatabase.LoadAssetAtPath($"Assets/Prefabs/Skills/Mage/EnergyBoltProjectile.prefab", typeof(GameObject));
         tempSkill.po = ob;
         return tempSkill;
     }

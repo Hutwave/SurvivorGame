@@ -96,5 +96,5 @@ public class SummonSkill : Skill // Maybe use BuffSkill at sametime if needed.
     public SkillType skillType = SkillType.Summon;
     public GameObject summon;
     public string targetType; // closest, strongest, any ranged
-    
+
 }

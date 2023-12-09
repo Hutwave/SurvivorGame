@@ -7,12 +7,18 @@ public class ExplosionCheck : MonoBehaviour
 
     private float damage;
     private float radius;
+    Light[] testLights;
 
     public void setDmg(float dmg, float dmgRadius)
     {
         damage = dmg;
         radius = dmgRadius;
         Explode();
+    }
+
+    public void Awake()
+    {
+        testLights = this.gameObject.GetComponentsInChildren<UnityEngine.Light>();
     }
 
     public void Explode()
@@ -32,6 +38,10 @@ public class ExplosionCheck : MonoBehaviour
         if (this.GetComponentInChildren<ParticleSystem>().isStopped)
         {
             Destroy(gameObject);
+        }
+        foreach(Light oneLight in testLights)
+        {
+            oneLight.intensity -= float.Parse(oneLight.name.Split('-')[1]);
         }
     }
 }
