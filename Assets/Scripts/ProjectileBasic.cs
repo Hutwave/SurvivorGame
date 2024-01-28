@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -29,7 +28,6 @@ public class ProjectileBasic : MonoBehaviour
 
     [SerializeReference]
     public ProjectileObject proj;
-
 
     internal Transform target;
     internal Vector3 targetVector;
@@ -74,7 +72,7 @@ public class ProjectileBasic : MonoBehaviour
     internal void HitTarget(Vector3? enemyPos = null)
     {
         Vector3 enemyLocation = Vector3.zero;
-        if(enemyPos != null)
+        if (enemyPos != null)
         {
             enemyLocation = (Vector3)enemyPos;
         }
@@ -198,18 +196,23 @@ public class ProjectileBasic : MonoBehaviour
                     }
                     break;
                 }
-                Vector3 currentTarget = enemiesTargeted[currentTargetNum].transform.position - transform.position;
+
                 if (currentTargetNum == 0)
                 {
                     HitTarget(enemiesTargeted[currentTargetNum].transform.position);
-                    currentTarget = enemiesTargeted[1].transform.position - transform.position;
                 }
-                transform.Translate(currentTarget.normalized * distanceThisFrame, Space.World);
-                float aaa = currentTarget.magnitude;
-                if (aaa < 0.5f)
+                else
                 {
-                    HitTarget(enemiesTargeted[currentTargetNum].transform.position);
+                    Vector3 currentTarget = enemiesTargeted[currentTargetNum].transform.position - transform.position;
+                    transform.Translate(currentTarget.normalized * distanceThisFrame, Space.World);
+                    float distToTarget = currentTarget.magnitude;
+
+                    if (distToTarget < 0.5f)
+                    {
+                        HitTarget(enemiesTargeted[currentTargetNum].transform.position);
+                    }
                 }
+
                 break;
         }
     }

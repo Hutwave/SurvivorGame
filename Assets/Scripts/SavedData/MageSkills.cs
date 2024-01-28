@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -7,7 +5,7 @@ using UnityEngine;
 public class MageSkills
 {
 
-    
+
     public BuffSkill MpEater;
     public BuffSkill ArcaneOverdrive;
     public BuffSkill Infinity;
@@ -26,6 +24,7 @@ public class MageSkills
         ob.setProj(ProjectileType.Targeted, true, false, tempSkill.damage);
         ob.projectileGameObject = (GameObject)AssetDatabase.LoadAssetAtPath($"Assets/Prefabs/Skills/Mage/EnergyBoltProjectile.prefab", typeof(GameObject));
         tempSkill.po = ob;
+        tempSkill.skillIcon = (Sprite)AssetDatabase.LoadAssetAtPath($"Assets/Prefabs/Skills/MagePictures/Firearrow.gif", typeof(Sprite));
         return tempSkill;
     }
     public ProjectileSkill FrozenOrb;
@@ -45,6 +44,7 @@ public class MageSkills
         BuffSkill tempSkill = new BuffSkill();
         tempSkill.boostAtt = 4;
         tempSkill.boostHpPerc = 7;
+        tempSkill.skillIcon = (Sprite)AssetDatabase.LoadAssetAtPath($"Assets/Prefabs/Skills/MagePictures/Meditation.gif", typeof(Sprite));
         return tempSkill;
     }
 
@@ -55,7 +55,7 @@ public class MageSkills
     }
 
     private int[] jokuNormi = new int[10] { 12, 14, 16, 18, 20, 22, 24, 26, 28, 30 };
-    
+
     private int mwLevel(int skillLevel)
     {
         return 10 + (skillLevel * 2);
@@ -65,12 +65,13 @@ public class MageSkills
     public BuffSkill MapleWarrior(int skillLevel)
     {
         BuffSkill mapleWarrior = new BuffSkill();
-        mapleWarrior.boostByLevel = new int[30] {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30 };
+        mapleWarrior.boostByLevel = new int[30] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30 };
         mapleWarrior.boostStrPerc = 1;
         mapleWarrior.boostDexPerc = 1;
         mapleWarrior.boostIntPerc = 1;
         mapleWarrior.boostLukPerc = 1;
-        mapleWarrior.GetDuration = x => { return 30 + x*9; }; // max 300
+        mapleWarrior.GetDuration = x => { return 30 + x * 9; }; // max 300
+        mapleWarrior.skillIcon = (Sprite)AssetDatabase.LoadAssetAtPath($"Assets/Prefabs/Skills/MagePictures/MapleWarrior.gif", typeof(Sprite));
         return mapleWarrior;
     }
 
@@ -80,6 +81,7 @@ public class MageSkills
 
         holySymbol.boostByLevel = new int[10] { 10, 12, 14, 16, 18, 20, 24, 27, 30, 35 };
         holySymbol.boostExpPerc = 1;
+        holySymbol.skillIcon = (Sprite)AssetDatabase.LoadAssetAtPath($"Assets/Prefabs/Skills/MagePictures/HolySymbol.gif", typeof(Sprite));
         return holySymbol;
     }
     // exp%

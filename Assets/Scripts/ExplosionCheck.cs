@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ExplosionCheck : MonoBehaviour
@@ -7,12 +5,16 @@ public class ExplosionCheck : MonoBehaviour
 
     private float damage;
     private float radius;
+    private float damageDelay;
+    private bool exploded;
     Light[] testLights;
 
-    public void setDmg(float dmg, float dmgRadius)
+    public void setDmg(float dmg, float dmgRadius, float dmgDelay = 0f)
     {
+        exploded = false;
         damage = dmg;
         radius = dmgRadius;
+        damageDelay = dmgDelay;
         Explode();
     }
 
@@ -23,12 +25,16 @@ public class ExplosionCheck : MonoBehaviour
 
     public void Explode()
     {
-        var sphere = Physics.OverlapSphere(this.gameObject.transform.position, radius, LayerMask.GetMask("Enemy"));
-        foreach (var enemy in sphere)
+        if (damageDelay < 0f)
         {
-            if (enemy.gameObject.tag == "Enemy")
+            exploded = true;
+            var sphere = Physics.OverlapSphere(this.gameObject.transform.position, radius, LayerMask.GetMask("Enemy"));
+            foreach (var enemy in sphere)
             {
-                enemy.transform.GetComponent<EnemyStats>().takeDamage(Mathf.RoundToInt(damage));
+                if (enemy.gameObject.tag == "Enemy")
+                {
+                    enemy.transform.GetComponent<EnemyStats>().takeDamage(Mathf.RoundToInt(damage));
+                }
             }
         }
     }
@@ -39,9 +45,14 @@ public class ExplosionCheck : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        foreach(Light oneLight in testLights)
+        foreach (Light oneLight in testLights)
         {
             oneLight.intensity -= float.Parse(oneLight.name.Split('-')[1]);
+        }
+        damageDelay -= (1f * Time.deltaTime);
+        if (!exploded && damageDelay < 0f)
+        {
+            Explode();
         }
     }
 }

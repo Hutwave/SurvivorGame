@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum SkillType
@@ -23,6 +21,7 @@ public class Skill
     public float manaCost;
     public float dotDamage;
     public float dotTime;
+    public Sprite skillIcon;
 
     public float[] damageByLevel;
     public float[] valueByLevel;
@@ -30,14 +29,11 @@ public class Skill
     public float[] manaCostByLevel;
     public float[] dotDamageByLevel;
 
+    public bool currentlyActive;
+    public float currentCooldown;
+
     public delegate int getDamage(int skillLvl);
     public Func<int, int> GetDuration;
-}
-
-public class InstantSkill : Skill
-{
-    public SkillType skillType = SkillType.Instant;
-    public GameObject effectWow;
 }
 
 public class ProjectileSkill : Skill

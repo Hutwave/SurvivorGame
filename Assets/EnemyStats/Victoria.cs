@@ -19,7 +19,8 @@ public static class VictoriaMobs
             VictoriaMobNames.Dark_Stump => new EnemyObject(false, 0f, 240, 33, 10, 5f, 42, 0, 0),
             VictoriaMobNames.Orange_Mushroom => new EnemyObject(false, 0f, 50, 18, 10, 8.5f, 17, 0, 0),
             VictoriaMobNames.Green_Mushroom => new EnemyObject(false, 0f, 150, 30, 10, 6f, 25, 0, 0),
-            VictoriaMobNames.Horned_Mushroom => new EnemyObject(false, 0f, 180, 35, 10, 6f, 32, 0, 0)
+            VictoriaMobNames.Horned_Mushroom => new EnemyObject(false, 0f, 180, 35, 10, 6f, 32, 0, 0),
+            _ => throw new System.NotImplementedException()
         };
 
         GameObject enemyGameObject = (GameObject)AssetDatabase.LoadAssetAtPath($"Assets/Prefabs/Mobs/{mobName}.prefab", typeof(GameObject));
@@ -29,10 +30,7 @@ public static class VictoriaMobs
         }
 
         EnemyStats enemy = enemyGameObject.GetComponent<EnemyStats>();
-        
-
         enemy.setStats(tempEnemy);
-
         return enemyGameObject;
 
     }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -16,15 +14,15 @@ public class MoveDestination : MonoBehaviour
     }
     void Update()
     {
-        if(targetLoc == null)
+        if (targetLoc == null)
         {
             targetLoc = haz.getPlayer().transform;
         }
         agent.destination = targetLoc.position;
-        
+
         if (targetLoc != null && agent.hasPath && agent.remainingDistance < 1.5f && dmgCd <= 0f)
         {
-            agent.enabled = false;
+            agent.isStopped = true;
             this.gameObject.GetComponent<Rigidbody>().isKinematic = false;
             this.gameObject.GetComponent<SphereCollider>().isTrigger = false;
             gameObject.GetComponent<Rigidbody>().AddExplosionForce(400f, haz.getPlayer().transform.position, 3f);
@@ -32,14 +30,14 @@ public class MoveDestination : MonoBehaviour
             dmgCd = 1f;
         }
 
-        if(!agent.enabled && dmgCd < 0.65f)
+        if (agent.isStopped && dmgCd < 0.65f)
         {
             this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
             this.gameObject.GetComponent<SphereCollider>().isTrigger = true;
-            agent.enabled = true;
+            agent.isStopped = false;
         }
 
-        if(dmgCd > 0f)
+        if (dmgCd > 0f)
         {
             dmgCd -= Time.deltaTime;
         }

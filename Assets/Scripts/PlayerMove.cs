@@ -1,9 +1,9 @@
 using Cinemachine;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Linq;
-using System.Collections.Generic;
-using UnityEditor;
 
 public class PlayerMove : MonoBehaviour
 {
@@ -23,10 +23,10 @@ public class PlayerMove : MonoBehaviour
     private InputAction playerSkillR;
     private InputAction playerSkillG;
 
-    private ProjectileObject Skill1;
-    private ProjectileObject Skill2;
+    private Skill Skill1;
+    private Skill Skill2;
     private Skill Skill3;
-    private ProjectileObject Skill4;
+    private Skill Skill4;
 
     public Vector3 Cam1;
     public Vector3 Cam2;
@@ -34,34 +34,30 @@ public class PlayerMove : MonoBehaviour
     private CinemachineVirtualCamera vcam;
     private CinemachineTransposer transposer;
 
+    private float intDamageMult;
     private float waitForHold;
     private GameLogic gameLogic;
-    private PlayerStats playerStats;
 
     private float dash = 1f;
     private float dashCd = 1f;
-
     private bool shootPs = false;
     Vector2 moveDir = Vector2.zero;
 
     // Set player stats
-    public void setStats(float dash, float dashcd, float speed)
+    public void setStats(PlayerStats stats)
     {
-        waitForHold = 1.5f;
+        intDamageMult = stats.GetTotalInt()/12f;
     }
 
     void Start()
     {
-        vcam = FindObjectOfType<Cinemachine.CinemachineVirtualCamera>();
+        vcam = FindObjectOfType<CinemachineVirtualCamera>();
         transposer = vcam.GetCinemachineComponent<CinemachineTransposer>();
         gameLogic = FindAnyObjectByType<GameLogic>();
-        Skill1 = Mage1st.EnergyBolt();
+        Skill1 = Mage1st.IceStrike();
         Skill2 = Mage1st.ChainLightning();
         Skill3 = Mage1st.Explosion();
         Skill4 = Mage1st.FireBall();
-
-        playerStats = new PlayerStats();
-        playerStats.InitializeNewPlayer(PlayerClass.Magician);
     }
 
     // Assign inputs for player
@@ -96,12 +92,6 @@ public class PlayerMove : MonoBehaviour
         playerSkillF.Enable();
         playerSkillR.Enable();
         playerSkillG.Enable();
-    }
-
-    // Give player a light when field gets too dim
-    public void lightsOn()
-    {
-        //gameObject.transform.GetChild(2).gameObject.SetActive(true);
     }
 
     // Hard limit for camera coming too close
@@ -248,20 +238,33 @@ public class PlayerMove : MonoBehaviour
 
     private void useArcSkill(ArcSkill arcSkill)
     {
-        if(arcSkill.attackArc == 360)
+        if (!gameLogic.useSkill(arcSkill.name)) return;
+        if (arcSkill.attackArc == 360)
         {
-            
+            // change to instant skill?
             GameObject arcExplosion = (GameObject)AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Skills/Mage/Explosion.prefab", typeof(GameObject));
             var explosionObject = Instantiate(arcExplosion, transform.position, Quaternion.identity);
-            explosionObject.GetComponent<ExplosionCheck>().setDmg(arcSkill.damage, arcSkill.attackRange);
+            explosionObject.GetComponent<ExplosionCheck>().setDmg(arcSkill.damage * intDamageMult, arcSkill.attackRange);
         }
     }
 
-    private void useProjectileSkill(ProjectileObject po)
+    private void useInstantSkill(InstantSkill skill)
     {
+        if (!gameLogic.useSkill(skill.name)) return;
+        Plane plane = new Plane(Vector3.up, Vector3.zero);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        plane.Raycast(ray, out var place);
+        Vector3 targetVector = ray.GetPoint(place);
+        GameObject chainBullet = Instantiate(skill.projectileGameObject, targetVector, Quaternion.identity);
+        chainBullet.GetComponent<ExplosionCheck>().setDmg(skill.baseDamage * intDamageMult, 20f, skill.damageDelay);
+    }
+
+    private void useProjectileSkill(ProjectileSkill skill)
+    {
+        if (!gameLogic.useSkill(skill.name)) return;
+        var po = skill.po;
         Transform target = null;
         Vector3 targetVector = new Vector3(0, 0);
-        Debug.LogError(po.projectileType);
         if (po.projectileType == ProjectileType.Tracking)
         {
             target = getClosestTarget(transform.position);
@@ -283,36 +286,29 @@ public class PlayerMove : MonoBehaviour
         if (po.projectileType == ProjectileType.Chain)
         {
             target = getClosestTarget(targetVector);
-            Debug.LogError("AA!!!!!!");
             List<Transform> enemiesHit = new List<Transform>();
-            if(target != null)
+            if (target != null)
             {
                 enemiesHit.Add(target);
             }
-            Debug.LogError("BB " + enemiesHit.Count);
             for (int i = 0; i < po.pierceCount; i++)
             {
                 Transform tempEnemy = getRandomTarget(enemiesHit.Last().position, po.range, true, enemiesHit);
-                if(tempEnemy != null)
+                if (tempEnemy != null)
                 {
                     enemiesHit.Add(tempEnemy);
                 }
             }
-            Debug.LogError("AA " + enemiesHit.Count);
-            /*enemiesHit.ForEach(oneEnemy =>
-            {
-                oneEnemy.GetComponent<EnemyStats>().takeDamage(Mathf.RoundToInt(po.damage));
-            });
-            */
             GameObject chainBullet = Instantiate(po.projectileGameObject, enemiesHit.First().position, transform.rotation);
             ProjectileBasic chainStats = chainBullet.GetComponent<ProjectileBasic>();
+            po.damage = po.baseDamage * intDamageMult;
             chainStats.setProjectile(po, enemiesHit);
             return;
         }
 
 
 
-        po.damage = Mathf.RoundToInt(po.baseDamage + playerStats.GetTotalInt() + playerStats.GetTotalAtt());
+        po.damage = Mathf.RoundToInt(po.baseDamage * intDamageMult);
         GameObject bulletToShoot = Instantiate(po.projectileGameObject, gameObject.transform.position, gameObject.transform.rotation);
         ProjectileBasic projectileStats = bulletToShoot.GetComponent<ProjectileBasic>();
         projectileStats.setProjectile(po);
@@ -329,12 +325,12 @@ public class PlayerMove : MonoBehaviour
 
     private void PlayerSkillE_performed(InputAction.CallbackContext obj)
     {
-        useProjectileSkill(Skill1);
+        useInstantSkill((InstantSkill)Skill1);
     }
 
     private void PlayerSkillF_performed(InputAction.CallbackContext obj)
     {
-        useProjectileSkill(Skill2);
+        useProjectileSkill((ProjectileSkill)Skill2);
     }
 
     private void PlayerSkillR_performed(InputAction.CallbackContext obj)
@@ -344,19 +340,22 @@ public class PlayerMove : MonoBehaviour
 
     private void PlayerSkillG_performed(InputAction.CallbackContext obj)
     {
-        useProjectileSkill(Skill4);
+        useProjectileSkill((ProjectileSkill)Skill4);
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown("7")){
-           transposer.m_FollowOffset = Cam1;
+        if (Input.GetKeyDown("7"))
+        {
+            transposer.m_FollowOffset = Cam1;
         }
-        if (Input.GetKeyDown("8")){
-           transposer.m_FollowOffset = Cam2;
+        if (Input.GetKeyDown("8"))
+        {
+            transposer.m_FollowOffset = Cam2;
         }
-        if (Input.GetKeyDown("9")){
-           transposer.m_FollowOffset = Cam3;
+        if (Input.GetKeyDown("9"))
+        {
+            transposer.m_FollowOffset = Cam3;
         }
         // Check for dash cooldown effect
 

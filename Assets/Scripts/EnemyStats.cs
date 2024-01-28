@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Pool;
 
 public class EnemyStats : MonoBehaviour
 {
@@ -53,10 +50,10 @@ public class EnemyStats : MonoBehaviour
     public void takeDamage(int dmg)
     {
         GameObject dmgSkin = (GameObject)AssetDatabase.LoadAssetAtPath($"Assets/Prefabs/DamageSkin.prefab", typeof(GameObject));
-        Transform dmgNumber = Instantiate(dmgSkin.transform, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y+2.25f, gameObject.transform.position.z-0.5f), Quaternion.identity);
+        Transform dmgNumber = Instantiate(dmgSkin.transform, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + 2.25f, gameObject.transform.position.z - 0.5f), Quaternion.identity);
         dmgNumber.Rotate(0, 0, UnityEngine.Random.Range(-5, 25));
         dmgNumber.transform.GetComponent<TextMeshPro>().SetText(dmg.ToString());
-        
+
         this.currentHealth -= dmg;
         if (currentHealth < 1)
         {
@@ -78,6 +75,6 @@ public class EnemyStats : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

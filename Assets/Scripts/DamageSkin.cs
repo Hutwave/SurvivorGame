@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 
 public class DamageSkin : MonoBehaviour
@@ -16,9 +13,9 @@ public class DamageSkin : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        textMesh.alpha -= 0.75f*Time.deltaTime;
+        textMesh.alpha -= 0.75f * Time.deltaTime;
         textMesh.transform.position += new Vector3(0.5f, 6f) * Time.deltaTime;
-        if(textMesh.alpha < 0.05f)
+        if (textMesh.alpha < 0.05f)
         {
             Destroy(transform.gameObject);
         }

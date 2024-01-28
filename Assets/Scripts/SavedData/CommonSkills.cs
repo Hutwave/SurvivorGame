@@ -1,7 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class CommonSkills
 {
@@ -13,7 +10,7 @@ public class CommonSkills
     }
 
     private int[] jokuNormi = new int[10] { 12, 14, 16, 18, 20, 22, 24, 26, 28, 30 };
-    
+
     private int mwLevel(int skillLevel)
     {
         return 10 + (skillLevel * 2);
@@ -23,12 +20,12 @@ public class CommonSkills
     public BuffSkill MapleWarrior(int skillLevel)
     {
         BuffSkill mapleWarrior = new BuffSkill();
-        mapleWarrior.boostByLevel = new int[30] {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30 };
+        mapleWarrior.boostByLevel = new int[30] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30 };
         mapleWarrior.boostStrPerc = 1;
         mapleWarrior.boostDexPerc = 1;
         mapleWarrior.boostIntPerc = 1;
         mapleWarrior.boostLukPerc = 1;
-        mapleWarrior.GetDuration = x => { return 30 + x*9; }; // max 300
+        mapleWarrior.GetDuration = x => { return 30 + x * 9; }; // max 300
         return mapleWarrior;
     }
 

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class goalTrigger : MonoBehaviour
@@ -9,13 +7,13 @@ public class goalTrigger : MonoBehaviour
 
     private void Start()
     {
-        rngGen= FindObjectOfType<GameLogic>();
+        rngGen = FindObjectOfType<GameLogic>();
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.name == "Player(Clone)")
+        if (other.gameObject.name == "Player(Clone)")
         {
-            rngGen.completeLevel();
+            // Old code
         }
     }
 }

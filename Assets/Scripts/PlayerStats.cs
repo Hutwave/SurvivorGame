@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,8 +13,10 @@ public class PlayerStats : MonoBehaviour
     // Main stats
     public float strength { get; private set; }
     public float dexterity { get; private set; }
-    public float intelligence { get; private set; }
+    public float intelligence { get; private set; } // SHORT WIS -> int is a type
+    public float luck { get; private set; }
 
+    public PlayerClass playerClass { get; private set; }
     public int playerLevel { get; set; }
     // Other stats
     public float armor { get; private set; }
@@ -26,6 +27,8 @@ public class PlayerStats : MonoBehaviour
     public float strPerc { get; private set; }
     public float dexPerc { get; private set; }
     public float intPerc { get; private set; }
+
+    public float lukPerc { get; private set; }
     public float attPerc { get; private set; }
     public float armorPerc { get; private set; }
     public float coolDownPerc { get; private set; }
@@ -48,6 +51,7 @@ public class PlayerStats : MonoBehaviour
         strPerc = 0;
         dexPerc = 0;
         intPerc = 0;
+        lukPerc = 0;
         attPerc = 0;
         armorPerc = 0;
         coolDownPerc = 0;
@@ -59,28 +63,68 @@ public class PlayerStats : MonoBehaviour
         healthPerc = 0;
         manaPoints = 0;
         manaPerc = 0;
+        playerLevel = 1;
+        playerClass = pClass;
 
-        switch(pClass){
+        switch (pClass)
+        {
             case PlayerClass.Warrior:
-                strength = 15;
+                strength = 20;
                 dexterity = 8;
                 intelligence = 4;
+                luck = 4;
                 break;
             case PlayerClass.Bowman:
                 strength = 8;
-                dexterity = 15;
-                intelligence = 4;
+                dexterity = 17;
+                intelligence = 5;
+                luck = 6;
                 break;
             case PlayerClass.Magician:
                 strength = 4;
                 dexterity = 8;
-                intelligence = 15;
+                intelligence = 16;
+                luck = 8;
                 break;
         }
-
         calculateStats();
     }
 
+    public void levelUp()
+    {
+        playerLevel++;
+        switch (playerClass)
+        {
+            case PlayerClass.Warrior:
+                strength += 3;
+                dexterity += 1;
+                if (playerLevel % 5 == 0) intelligence += 1;
+                if (playerLevel % 3 == 0) luck += 1;
+                break;
+            case PlayerClass.Bowman:
+                strength += 1;
+                dexterity += 3;
+                if (playerLevel % 4 == 0) intelligence += 1;
+                if (playerLevel % 3 == 0) luck += 1;
+                break;
+            case PlayerClass.Magician:
+                intelligence += 3;
+                luck += 1;
+                if (playerLevel % 5 == 0) strength += 1;
+                if (playerLevel % 3 == 0) dexterity += 1;
+                break;
+        }
+        Debug.LogWarning("Stats:" + string.Join(',', new List<string>() { strength.ToString(), dexterity.ToString(), intelligence.ToString(), luck.ToString() }));
+    }
+
+    public void addStats(int str, int dex, int wis, int luk)
+    {
+        strength += str;
+        dexterity += dex;
+        intelligence += wis;
+        luck += luk;
+        Debug.LogWarning("Stats:" + string.Join(',', new List<string>() { strength.ToString(), dexterity.ToString(), intelligence.ToString(), luck.ToString() }));
+    }
 
     public void calculateStats()
     {
@@ -99,6 +143,10 @@ public class PlayerStats : MonoBehaviour
     public int GetTotalInt()
     {
         return Mathf.RoundToInt(intelligence * (1f + (0.01f * (allStatPerc + intPerc))));
+    }
+    public int GetTotalLuk()
+    {
+        return Mathf.RoundToInt(luck * (1f + (0.01f * (allStatPerc + lukPerc))));
     }
 
     public int GetTotalAtt()

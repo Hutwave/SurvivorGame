@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class EnemyObject
 {
     public bool staysAway;
@@ -30,7 +26,7 @@ public class EnemyObject
         speed = 5f;
 
         touchDamage = 10f;
-        skillDamage = 5f;   
+        skillDamage = 5f;
         skillRange = 20f;
 
         element = "Fire"; // enum jos joskus käyttöön

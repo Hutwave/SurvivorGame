@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ProjectileObject
@@ -72,6 +70,7 @@ public class ProjectileObject
     {
         projectileType = ProjectileType.Tracking;
         isExplosive = explode;
+        baseDamage = dmg;
         isPiercing = pierce;
         damage = dmg;
         explosionRadius = 1f;
@@ -86,6 +85,7 @@ public class ProjectileObject
         projectileType = ProjectileType.Targeted;
         isExplosive = explode;
         isPiercing = pierce;
+        baseDamage = dmg;
         damage = dmg;
         explosionRadius = 1f;
         range = 100f;
@@ -98,6 +98,7 @@ public class ProjectileObject
         projectileType = ProjectileType.Directional;
         isExplosive = explode;
         isPiercing = pierce;
+        baseDamage = dmg;
         damage = dmg;
         explosionRadius = 1f;
         range = 100f;
@@ -110,6 +111,7 @@ public class ProjectileObject
         projectileType = ProjectileType.Pointed;
         isExplosive = explode;
         isPiercing = pierce;
+        baseDamage = dmg;
         damage = dmg;
         explosionRadius = 1f;
         range = 100f;
@@ -123,11 +125,12 @@ public class ProjectileObject
         isExplosive = false;
         isPiercing = true;
         damage = dmg;
+        baseDamage = dmg;
         explosionRadius = 0.1f;
         range = 16f;
         lifeTime = 5f;
         speed = 60f;
-        pierceCount = pierce-1;
+        pierceCount = pierce - 1;
         explosionRadius = newRadius;
     }
 }

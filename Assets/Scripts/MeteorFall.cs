@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MeteorFall : MonoBehaviour
@@ -30,12 +28,12 @@ public class MeteorFall : MonoBehaviour
     // Check for collision
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.gameObject.layer==0 && onceOnly)
+        if (collision.collider.gameObject.layer == 0 && onceOnly)
         {
             onceOnly = false;
             gen.receiveGameObject(Instantiate<GameObject>(meteorGround, this.transform.position, Quaternion.identity));
             Destroy(this.gameObject);
         }
-        
+
     }
 }
