@@ -382,13 +382,15 @@ public class PlayerMove : MonoBehaviour
         // Movement
         moveDir = playerControls.ReadValue<Vector2>();
         float dashFinal = dash > 1f ? dash : 1f;
-        rb.velocity = new Vector3(moveDir.x * speed * dashFinal, rb.velocity.y, moveDir.y * speed * dashFinal);
-        if (rb.velocity.magnitude != 0)
-        {
-            var rotation = Quaternion.LookRotation(rb.velocity, transform.up);
-            rotation.x = 0;
-            rotation.z = 0;
-            rb.rotation = rotation.normalized;
-        }
+        rb.linearVelocity = new Vector3(moveDir.x * speed * dashFinal, rb.linearVelocity.y, moveDir.y * speed * dashFinal);
+
+        Plane plane = new Plane(Vector3.up, Vector3.zero);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        plane.Raycast(ray, out var place);
+        
+        Vector3 targetVector = ray.GetPoint(place);
+        Debug.Log(targetVector);
+        rb.transform.LookAt(new Vector3(targetVector.x, rb.transform.position.y, targetVector.z));
+
     }
 }
