@@ -9,7 +9,7 @@ public class MoveDestination : MonoBehaviour
     private float dmgCd;
     private void Awake()
     {
-        haz = FindObjectOfType<GameLogic>();
+        haz = FindAnyObjectByType<GameLogic>();
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
     }
     void Update()

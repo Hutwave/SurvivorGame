@@ -51,7 +51,7 @@ public class PlayerMove : MonoBehaviour
 
     void Start()
     {
-        vcam = FindObjectOfType<CinemachineVirtualCamera>();
+        vcam = FindAnyObjectByType<CinemachineVirtualCamera>();
         transposer = vcam.GetCinemachineComponent<CinemachineTransposer>();
         gameLogic = FindAnyObjectByType<GameLogic>();
         Skill1 = Mage1st.IceStrike();
@@ -97,7 +97,7 @@ public class PlayerMove : MonoBehaviour
     // Hard limit for camera coming too close
     public void camerafov(float fov)
     {
-        FindObjectOfType<CinemachineVirtualCamera>().m_Lens.FieldOfView = fov > 18f ? fov : 18f;
+        FindAnyObjectByType<CinemachineVirtualCamera>().m_Lens.FieldOfView = fov > 18f ? fov : 18f;
     }
 
     public Transform getRandomTarget(Vector3 location, float radius, bool random, List<Transform> ignore)
@@ -389,7 +389,6 @@ public class PlayerMove : MonoBehaviour
         plane.Raycast(ray, out var place);
         
         Vector3 targetVector = ray.GetPoint(place);
-        Debug.Log(targetVector);
         rb.transform.LookAt(new Vector3(targetVector.x, rb.transform.position.y, targetVector.z));
 
     }

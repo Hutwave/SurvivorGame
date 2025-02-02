@@ -8,7 +8,7 @@ public class TreeLogic : MonoBehaviour
     void Start()
     {
         hasFallen = false;
-        var gen = FindObjectOfType<GameLogic>();
+        var gen = FindAnyObjectByType<GameLogic>();
     }
     public void makeFall(Transform trans)
     {

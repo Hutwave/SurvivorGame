@@ -7,7 +7,7 @@ public class goalTrigger : MonoBehaviour
 
     private void Start()
     {
-        rngGen = FindObjectOfType<GameLogic>();
+        rngGen = FindAnyObjectByType<GameLogic>();
     }
     private void OnTriggerEnter(Collider other)
     {

@@ -12,7 +12,7 @@ public class MeteorFall : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gen = FindObjectOfType<GameLogic>();
+        gen = FindAnyObjectByType<GameLogic>();
         onceOnly = true;
         targetLocation = new Vector3(transform.position.x - xzChange, transform.position.y - 55f, transform.position.z + Mathf.Abs(xzChange));
     }
