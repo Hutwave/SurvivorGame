@@ -44,12 +44,30 @@ public class GameLogic : MonoBehaviour
     private GameObject treeFolder;
 
     // UI
+    public GameObject equipUI;
+    public GameObject invUI;
     private ExpBar expBar;
     private HealthBar healthBar;
     private SkillBar skillBar;
     
+    private GameObject equt;
+    private Equips equipment;
+    private GameObject itemit;
+    private Inventory inventory;
+    private int itemIdInc;
+
+    private List<Item> playerItems;
+    private List<Item> equippedItems;
+    ItemConfig testWand;
+    ItemConfig testWond;
     void Start()
     {
+        playerItems = new List<Item>();
+        equippedItems = new List<Item>();
+        itemIdInc++;
+        testWand = Addressables.LoadAssetAsync<ItemConfig>("TestWandd").WaitForCompletion();
+        testWond = Addressables.LoadAssetAsync<ItemConfig>("TestWandy").WaitForCompletion();
+
         treeFolder = new GameObject("GeneratedTrees");
         expBar = FindAnyObjectByType<ExpBar>();
         healthBar = FindAnyObjectByType<HealthBar>();
@@ -61,6 +79,11 @@ public class GameLogic : MonoBehaviour
         healthBar.SetMaxHealth(maxHealth);
         RenderSettings.fogStartDistance = -100f;
         RenderSettings.fogEndDistance = 180f;
+        equt = Instantiate(equipUI);
+        equt.name = "AAAAAA";
+        equipment = equt.GetComponent<Equips>();
+        itemit = Instantiate(invUI);
+        inventory = itemit.GetComponent<Inventory>();
     }
 
     public void cantDie()
@@ -98,6 +121,10 @@ public class GameLogic : MonoBehaviour
         var tempSkill = skills.First(x => string.Equals(x.name, skillName));
         if (tempSkill.currentCooldown > 0.01f)
         {
+            itemIdInc++;
+            playerItems.Add(testWand.getItem());
+            playerItems.Add(testWond.getItem());
+            itemit.GetComponent<Inventory>().updateItems(playerItems);
             return false;
         }
         tempSkill.currentCooldown = tempSkill.coolDown;
@@ -140,6 +167,26 @@ public class GameLogic : MonoBehaviour
         Vector3 newGoal = RandomizeLocation(40, 90, 150, out _);
         startPlaceObject.transform.position = new Vector3(newPlace.x, 0.5f, newPlace.z);
         playerInstance.transform.position = new Vector3(startPlaceObject.transform.position.x, startPlaceObject.transform.position.y + 0.35f, startPlaceObject.transform.position.z);
+    }
+
+    public void equipItem(Item item)
+    {
+        Item tempItem = null;
+        if(equippedItems != null && equippedItems.Count > 0)
+        {
+            tempItem = equippedItems.FirstOrDefault(x => x.itemType == item.itemType);
+        }
+        
+        if(tempItem != null)
+        {
+            equippedItems.Remove(tempItem);
+            playerItems.Add(tempItem);
+        }
+        equippedItems.Add(item);
+        playerItems.Remove(item);
+
+        equipment.updateItems(equippedItems);
+        inventory.updateItems(playerItems);
     }
 
     public void receiveGameObject(GameObject haz)
