@@ -14,7 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: Default Local Group
   m_GUID: 87f1771c731a11a49bb8c57b26fccbad
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 9dae909baa8e5af4a9a275dcde7ef27c
+    m_Address: Assets/Prefabs/Items/TestWand.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b6816543d8f91f442b93abc9d4368834
+    m_Address: Assets/Prefabs/Wand.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ba68c62d57797004fac251f76177965b
+    m_Address: Assets/Items/Item2.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 2016dbd9ce2855a4e9e66e68b4c49582, type: 2}
   m_SchemaSet:

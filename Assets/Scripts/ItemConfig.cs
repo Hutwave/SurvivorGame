@@ -12,7 +12,7 @@ public class ItemConfig : ScriptableObject
     public int attack;
     public int defense;
     public int intelligence;
-    public itemType itemType;
+    public ItemType itemType;
     public PlayerClass classReq;
     public GameObject itemObject;
     public Sprite img;

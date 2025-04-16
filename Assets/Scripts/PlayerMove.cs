@@ -22,6 +22,7 @@ public class PlayerMove : MonoBehaviour
     private InputAction playerSkillF;
     private InputAction playerSkillR;
     private InputAction playerSkillG;
+    private InputAction playerInventoryButton;
 
     private Skill Skill1;
     private Skill Skill2;
@@ -92,6 +93,29 @@ public class PlayerMove : MonoBehaviour
         playerSkillF.Enable();
         playerSkillR.Enable();
         playerSkillG.Enable();
+    }
+
+    public void togglePlayerInventory()
+    {
+        gameLogic.toggleEquip();
+    }
+
+    public void equipItem(Item item)
+    {
+        switch (item.itemType)
+        {
+            case ItemType.Weapon:
+                {
+                    var temppi = Instantiate(item.itemObject);
+                    var wepPoint = transform.Find("Arm").Find("WeaponPoint");
+                    temppi.transform.SetParent(wepPoint);
+                    temppi.transform.SetPositionAndRotation(wepPoint.position, wepPoint.rotation);
+                    //temppi.transform.position=transform.Find("Arm").Find("WeaponPoint").position;
+                    //temppi.transform.rotation = transform.Find("Arm").Find("WeaponPoint").rotation;
+                    return;
+                }
+            default: return;
+        }
     }
 
     // Hard limit for camera coming too close
@@ -291,18 +315,21 @@ public class PlayerMove : MonoBehaviour
             {
                 enemiesHit.Add(target);
             }
-            for (int i = 0; i < po.pierceCount; i++)
+            if (enemiesHit.Count > 0)
             {
-                Transform tempEnemy = getRandomTarget(enemiesHit.Last().position, po.range, true, enemiesHit);
-                if (tempEnemy != null)
+                for (int i = 0; i < po.pierceCount; i++)
                 {
-                    enemiesHit.Add(tempEnemy);
+                    Transform tempEnemy = getRandomTarget(enemiesHit.Last().position, po.range, true, enemiesHit);
+                    if (tempEnemy != null)
+                    {
+                        enemiesHit.Add(tempEnemy);
+                    }
                 }
+                GameObject chainBullet = Instantiate(po.projectileGameObject, enemiesHit.First().position, transform.rotation);
+                ProjectileBasic chainStats = chainBullet.GetComponent<ProjectileBasic>();
+                po.damage = po.baseDamage * intDamageMult;
+                chainStats.setProjectile(po, enemiesHit);
             }
-            GameObject chainBullet = Instantiate(po.projectileGameObject, enemiesHit.First().position, transform.rotation);
-            ProjectileBasic chainStats = chainBullet.GetComponent<ProjectileBasic>();
-            po.damage = po.baseDamage * intDamageMult;
-            chainStats.setProjectile(po, enemiesHit);
             return;
         }
 
@@ -341,6 +368,11 @@ public class PlayerMove : MonoBehaviour
     private void PlayerSkillG_performed(InputAction.CallbackContext obj)
     {
         useProjectileSkill((ProjectileSkill)Skill4);
+    }
+
+    private void PlayerInventory_performed(InputAction.CallbackContext obj)
+    {
+        togglePlayerInventory();
     }
 
     private void Update()

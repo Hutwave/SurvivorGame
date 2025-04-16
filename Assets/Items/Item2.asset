@@ -9,17 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0630fce5a2ffdf04fa5a6cc3f6f06abb, type: 3}
+  m_Script: {fileID: 11500000, guid: a68a086010b8ae64da6001e68a2fd9a6, type: 3}
   m_Name: Item2
   m_EditorClassIdentifier: 
-  itemName: TestWandd
-  itemId: 55
-  itemLevel: 4
-  attack: 5
-  defense: 6
-  intelligence: 7
+  itemName: Testwand
+  itemId: 0
+  itemLevel: 8
+  attack: 20
+  defense: 0
+  intelligence: 0
   itemType: 0
-  classReq: 3
-  itemObject: {fileID: 5200580309014169940, guid: dce50252ed5c3f5449279ca2e1fbc9d4,
+  classReq: 0
+  itemObject: {fileID: 5200580309014169940, guid: 9dae909baa8e5af4a9a275dcde7ef27c,
     type: 3}
-  img: {fileID: 21300000, guid: c02d53a4a19a6f040bb7eeda21086e47, type: 3}
+  img: {fileID: 21300000, guid: 496ea9c0243abb546b9d13570a60b3a5, type: 3}

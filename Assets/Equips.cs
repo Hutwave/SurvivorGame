@@ -62,26 +62,26 @@ public class Equips : MonoBehaviour
         Item tempItem = new Item();
         switch (item.itemType)
         {
-            case itemType.Hat:
+            case ItemType.Hat:
                 updateIcon(hatPanel, item.img);
                 return;
-            case itemType.Top:
+            case ItemType.Top:
                 updateIcon(topPanel, item.img);
                 return;
-            case itemType.Bottom:
+            case ItemType.Bottom:
                 updateIcon(bottomPanel, item.img);
                 return;
-            case itemType.Glove:
+            case ItemType.Glove:
                 updateIcon(glovePanel, item.img);
                 return;
-            case itemType.Shoe:
+            case ItemType.Shoe:
                 updateIcon(shoePanel, item.img);
                 return;
-            case itemType.Weapon:
+            case ItemType.Weapon:
                 weapon = item;
                 updateIcon(weaponPanel, item.img);
                 return;
-            case itemType.Secondary:
+            case ItemType.Secondary:
                 secondary = item;
                 updateIcon(secondaryPanel, item.img);
                 return;

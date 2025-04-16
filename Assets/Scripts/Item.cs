@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public enum itemType{
+public enum ItemType{
     Weapon,
     Secondary,
     Hat,
@@ -14,7 +11,6 @@ public enum itemType{
 }
 
 
-
 public class Item
 {
     public string itemName;
@@ -22,7 +18,7 @@ public class Item
     public int attack;
     public int defense;
     public int intelligence;
-    public itemType itemType;
+    public ItemType itemType;
     public PlayerClass classReq;
     public GameObject itemObject;
     public Sprite img;

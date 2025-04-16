@@ -66,8 +66,8 @@ public class GameLogic : MonoBehaviour
         playerItems = new List<Item>();
         equippedItems = new List<Item>();
         itemIdInc++;
-        testWand = Addressables.LoadAssetAsync<ItemConfig>("TestWandd").WaitForCompletion();
-        testWond = Addressables.LoadAssetAsync<ItemConfig>("TestWandy").WaitForCompletion();
+        testWand = Addressables.LoadAssetAsync<ItemConfig>("Assets/Items/Item2.asset").WaitForCompletion();
+        testWond = Addressables.LoadAssetAsync<ItemConfig>("Assets/Items/Item2.asset").WaitForCompletion();
 
         treeFolder = new GameObject("GeneratedTrees");
         expBar = FindAnyObjectByType<ExpBar>();
@@ -90,6 +90,12 @@ public class GameLogic : MonoBehaviour
     public void cantDie()
     {
         canDie = false;
+    }
+
+    public void toggleEquip()
+    {
+        equt.SetActive(!equt.activeSelf);
+        itemit.SetActive(!equt.activeSelf);
     }
 
     private void gameOver()
@@ -188,6 +194,7 @@ public class GameLogic : MonoBehaviour
 
         equipment.updateItems(equippedItems);
         inventory.updateItems(playerItems);
+        playerLogic.equipItem(item);
     }
 
     public void receiveGameObject(GameObject haz)

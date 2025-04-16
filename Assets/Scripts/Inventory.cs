@@ -7,7 +7,7 @@ public class Inventory : MonoBehaviour
 {
     public GameObject invSlotPanel;
     public GameObject invSlot;
-    public GameLogic gameLogic;
+    private GameLogic gameLogic;
 
     private void Start()
     {
