@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 87f1771c731a11a49bb8c57b26fccbad
   m_SerializeEntries:
+  - m_GUID: 7da07834388f4394591a90de52e2b925
+    m_Address: Assets/Items/Hats/Mage10.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9dae909baa8e5af4a9a275dcde7ef27c
     m_Address: Assets/Prefabs/Items/TestWand.prefab
     m_ReadOnly: 0

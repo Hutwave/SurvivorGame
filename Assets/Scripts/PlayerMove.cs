@@ -114,6 +114,14 @@ public class PlayerMove : MonoBehaviour
                     //temppi.transform.rotation = transform.Find("Arm").Find("WeaponPoint").rotation;
                     return;
                 }
+            case ItemType.Hat:
+                {
+                    var temppi = Instantiate(item.itemObject);
+                    var wepPoint = transform.Find("HatPoint");
+                    temppi.transform.SetParent(wepPoint);
+                    temppi.transform.SetPositionAndRotation(wepPoint.position, wepPoint.rotation);
+                    return;
+                }
             default: return;
         }
     }

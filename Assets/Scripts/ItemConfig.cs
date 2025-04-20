@@ -28,7 +28,8 @@ public class ItemConfig : ScriptableObject
             classReq = PlayerClass.Magician,
             itemObject = this.itemObject,
             itemName = this.itemName + this.itemId,
-            img = this.img
+            img = this.img,
+            itemType = this.itemType
         };
     }
 }

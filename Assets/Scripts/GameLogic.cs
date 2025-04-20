@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Pool;
@@ -56,11 +57,13 @@ public class GameLogic : MonoBehaviour
     private GameObject itemit;
     private Inventory inventory;
     private int itemIdInc;
+    private float currentShop;
 
     private List<Item> playerItems;
     private List<Item> equippedItems;
     ItemConfig testWand;
     ItemConfig testWond;
+    public GameObject kauppa;
     void Start()
     {
         playerItems = new List<Item>();
@@ -85,8 +88,17 @@ public class GameLogic : MonoBehaviour
         equipment = equt.GetComponent<Equips>();
         itemit = Instantiate(invUI);
         inventory = itemit.GetComponent<Inventory>();
+        currentShop = 1f;
+        updateUI();
     }
 
+    public void updateUI()
+    {
+        var jotaki = inventory.transform.childCount;
+        var mesoDisplay = inventory.transform.Find("InventoryModal").Find("CurrencyBar").Find("MesoPanel").Find("MesoValue");
+        var mesoText = mesoDisplay.gameObject.GetComponent<TextMeshProUGUI>();
+        mesoText.text = playerMeso.ToString();
+            }
     public void cantDie()
     {
         canDie = false;
@@ -98,11 +110,27 @@ public class GameLogic : MonoBehaviour
         itemit.SetActive(!equt.activeSelf);
     }
 
+    public bool showShop(ItemShop shop, float range, bool enable)
+    {
+        if(enable && range < currentShop)
+        {
+            // eti kauppa jostaki nimellÃ¤ ja avaa se
+            currentShop = range;
+            return true;
+
+        }
+        else if (!enable)
+        {
+            currentShop = 10f;
+        }
+        return false;
+    }
+
     private void gameOver()
     {
         if (canDie && currentHealth < 0f)
         {
-            // tähän game over!
+            // tÃ¤hÃ¤n game over!
         }
     }
 
@@ -121,6 +149,35 @@ public class GameLogic : MonoBehaviour
     public List<Skill> getPlayerSkills()
     {
         return skills;
+    }
+
+    public int getMesos()
+    {
+        return playerMeso;
+    }
+
+    public bool addMesos(int meso)
+    {
+        if (meso > 0)
+        {
+            playerMeso += meso;
+            updateUI();
+            return true;
+        }
+        else
+        {
+            if(playerMeso > meso)
+            {
+                playerMeso += meso;
+                updateUI();
+                return true;
+            }
+            else
+            {
+                updateUI();
+                return false;
+            }
+        }
     }
 
     public bool useSkill(string skillName)
@@ -170,10 +227,10 @@ public class GameLogic : MonoBehaviour
         frameTimeSinceLastUpdate = 0f;
 
         // For now - old level gen code
-        Vector3 newPlace = RandomizeLocation(20, 70, 20, out _);
-        Vector3 newGoal = RandomizeLocation(40, 90, 150, out _);
-        startPlaceObject.transform.position = new Vector3(newPlace.x, 0.5f, newPlace.z);
-        playerInstance.transform.position = new Vector3(startPlaceObject.transform.position.x, startPlaceObject.transform.position.y + 0.35f, startPlaceObject.transform.position.z);
+        //Vector3 newPlace = RandomizeLocation(20, 70, 20, out _);
+        //Vector3 newGoal = RandomizeLocation(40, 90, 150, out _);
+        //startPlaceObject.transform.position = new Vector3(newPlace.x, 0.5f, newPlace.z);
+        //playerInstance.transform.position = new Vector3(startPlaceObject.transform.position.x, startPlaceObject.transform.position.y + 0.35f, startPlaceObject.transform.position.z);
     }
 
     public void equipItem(Item item)
@@ -230,6 +287,7 @@ public class GameLogic : MonoBehaviour
         {
             levelUpPlayer();
         }
+        updateUI();
     }
 
     private void killAction(EnemyStats enemystats, VictoriaMobNames poolKey)
@@ -269,7 +327,7 @@ public class GameLogic : MonoBehaviour
                 return Instantiate(tempMob);
             }, tempMob =>
             {
-                tempMob.SetActive(true);
+                tempMob.SetActive(false);
             }, tempMob =>
             {
                 tempMob.SetActive(false);
@@ -282,6 +340,7 @@ public class GameLogic : MonoBehaviour
     }
     void spawnEnemy(VictoriaMobNames poolKey)
     {
+        return;
         GameObject mob = enemyPools[poolKey].Get();
         var enemyStatObject = mob.GetComponent<EnemyStats>();
         enemyStatObject.returnToPoolAction(killAction);

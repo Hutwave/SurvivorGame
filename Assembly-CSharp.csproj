@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\GameLogic.cs" />
     <Compile Include="Assets\Scripts\SkillBar.cs" />
     <Compile Include="Assets\Scripts\SavedData\CommonSkills.cs" />
+    <Compile Include="Assets\Prefabs\Shops\WeaponShopLogic.cs" />
     <Compile Include="Assets\Scripts\PlayerInputActions.cs" />
     <Compile Include="Assets\EnemyStats\Victoria.cs" />
     <Compile Include="Assets\Scripts\ExpBar.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Assets\Scripts\DamageSkin.cs" />
     <Compile Include="Assets\Scripts\PlayerMove.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
+    <Compile Include="Assets\Scripts\ItemShop.cs" />
     <Compile Include="Assets\Equips.cs" />
     <Compile Include="Assets\Scripts\HealthBar.cs" />
     <Compile Include="Assets\Skills\Mage1st.cs" />
