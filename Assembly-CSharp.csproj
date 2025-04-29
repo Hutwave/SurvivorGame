@@ -61,6 +61,7 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\CustomSSHHandler.cs" />
     <Compile Include="Assets\Scripts\EnemyStats.cs" />
     <Compile Include="Assets\Scripts\NavScriptRusher.cs" />
     <Compile Include="Assets\Scripts\GameLogic.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Assets\Scripts\goalTrigger.cs" />
     <Compile Include="Assets\Scripts\ItemConfig.cs" />
     <Compile Include="Assets\Scripts\Inventory.cs" />
+    <Compile Include="Assets\Scripts\PlayerSave.cs" />
     <Compile Include="Assets\Scripts\PlayerSkills.cs" />
     <Compile Include="Assets\Scripts\EnemyObject.cs" />
     <Compile Include="Assets\Scripts\MeteorFall.cs" />

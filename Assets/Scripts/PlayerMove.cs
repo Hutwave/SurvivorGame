@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class PlayerMove : MonoBehaviour
@@ -11,18 +12,9 @@ public class PlayerMove : MonoBehaviour
     public ParticleSystem ps;
     public Rigidbody rb;
     public GameObject player;
-    public GameObject energyBolt;
 
-    private PlayerInputActions playerInputs;
+    //private PlayerInputActions playerInputs;
     private InputAction playerControls;
-    private InputAction playerDashPress;
-    private InputAction playerDashHold;
-
-    private InputAction playerSkillE;
-    private InputAction playerSkillF;
-    private InputAction playerSkillR;
-    private InputAction playerSkillG;
-    private InputAction playerInventoryButton;
 
     private Skill Skill1;
     private Skill Skill2;
@@ -59,45 +51,65 @@ public class PlayerMove : MonoBehaviour
         Skill2 = Mage1st.ChainLightning();
         Skill3 = Mage1st.Explosion();
         Skill4 = Mage1st.FireBall();
+        playerControls = InputSystem.actions.FindAction("Move");
     }
 
     // Assign inputs for player
-    private void Awake()
+    public void OnPlayerSkillE()
     {
-        playerInputs = new PlayerInputActions();
+        useInstantSkill(Skill1 as InstantSkill);
     }
 
-    // Assign controls on player spawn
-    private void OnEnable()
+    public void OnPlayerSkillF()
     {
-        playerControls = playerInputs.Player.Move;
-        playerDashPress = playerInputs.Player.DashPress;
-        playerDashHold = playerInputs.Player.DashHold;
-
-        playerSkillE = playerInputs.Player.SkillE;
-        playerSkillF = playerInputs.Player.SkillF;
-        playerSkillR = playerInputs.Player.SkillR;
-        playerSkillG = playerInputs.Player.SkillG;
-
-        playerDashPress.performed += PlayerDashPress_performed;
-        playerDashHold.performed += PlayerDashHold_performed;
-        playerSkillE.performed += PlayerSkillE_performed;
-        playerSkillR.performed += PlayerSkillR_performed;
-        playerSkillG.performed += PlayerSkillG_performed;
-        playerSkillF.performed += PlayerSkillF_performed;
-
-        playerControls.Enable();
-        playerDashPress.Enable();
-        playerDashHold.Enable();
-        playerSkillE.Enable();
-        playerSkillF.Enable();
-        playerSkillR.Enable();
-        playerSkillG.Enable();
+        useProjectileSkill(Skill2 as ProjectileSkill);
     }
 
-    public void togglePlayerInventory()
+    public void OnPlayerSkillR()
     {
-        gameLogic.toggleEquip();
+        useArcSkill(Skill3 as ArcSkill);
+    }
+    public void OnPlayerSkillG()
+    {
+        useProjectileSkill(Skill4 as ProjectileSkill);
+    }
+
+    public void OnInventoryButton()
+    {
+        gameLogic.toggleWindow(WindowType.Inventory);
+    }
+
+    public void OnEquipButton()
+    {
+        gameLogic.toggleWindow(WindowType.Equipment);
+    }
+
+    public void OnDashPress()
+    {
+        if (dashCd < 0.1f)
+        {
+            shootPs = true;
+            dash = 1.85f;
+            dashCd = 1.5f;
+            waitForHold = 0.75f;
+        }
+        else if (dash < 1.1f)
+        {
+            dash = 1.1f;
+        }
+    }
+
+    public void OnDashHold()
+    {
+        if (waitForHold > 0)
+        {
+            dash = 2.75f;
+            dashCd = 3f;
+        }
+        else if (dash < 1.15f)
+        {
+            dash = 1.15f;
+        }
     }
 
     public void equipItem(Item item)
@@ -240,33 +252,7 @@ public class PlayerMove : MonoBehaviour
         return target;
     }
 
-    private void PlayerDashPress_performed(InputAction.CallbackContext obj)
-    {
-        if (dashCd < 0.1f)
-        {
-            shootPs = true;
-            dash = 1.85f;
-            dashCd = 1.5f;
-            waitForHold = 0.75f;
-        }
-        else if (dash < 1.1f)
-        {
-            dash = 1.1f;
-        }
-    }
-
-    private void PlayerDashHold_performed(InputAction.CallbackContext obj)
-    {
-        if (waitForHold > 0)
-        {
-            dash = 2.75f;
-            dashCd = 3f;
-        }
-        else if (dash < 1.15f)
-        {
-            dash = 1.15f;
-        }
-    }
+   
 
     private void useArcSkill(ArcSkill arcSkill)
     {
@@ -358,30 +344,7 @@ public class PlayerMove : MonoBehaviour
         else projectileStats.Seek(target.transform);
     }
 
-    private void PlayerSkillE_performed(InputAction.CallbackContext obj)
-    {
-        useInstantSkill((InstantSkill)Skill1);
-    }
-
-    private void PlayerSkillF_performed(InputAction.CallbackContext obj)
-    {
-        useProjectileSkill((ProjectileSkill)Skill2);
-    }
-
-    private void PlayerSkillR_performed(InputAction.CallbackContext obj)
-    {
-        useArcSkill(Skill3 as ArcSkill);
-    }
-
-    private void PlayerSkillG_performed(InputAction.CallbackContext obj)
-    {
-        useProjectileSkill((ProjectileSkill)Skill4);
-    }
-
-    private void PlayerInventory_performed(InputAction.CallbackContext obj)
-    {
-        togglePlayerInventory();
-    }
+   
 
     private void Update()
     {
@@ -397,6 +360,18 @@ public class PlayerMove : MonoBehaviour
         {
             transposer.m_FollowOffset = Cam3;
         }
+
+        moveDir = playerControls.ReadValue<Vector2>();
+        float dashFinal = dash > 1f ? dash : 1f;
+        rb.linearVelocity = new Vector3(moveDir.x * speed * dashFinal, rb.linearVelocity.y, moveDir.y * speed * dashFinal);
+
+        Plane plane = new Plane(Vector3.up, Vector3.zero);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        plane.Raycast(ray, out var place);
+
+        Vector3 targetVector = ray.GetPoint(place);
+        rb.transform.LookAt(new Vector3(targetVector.x, rb.transform.position.y, targetVector.z));
+
         // Check for dash cooldown effect
 
         if (dashCd > -0.1f)
@@ -420,16 +395,7 @@ public class PlayerMove : MonoBehaviour
         }
 
         // Movement
-        moveDir = playerControls.ReadValue<Vector2>();
-        float dashFinal = dash > 1f ? dash : 1f;
-        rb.linearVelocity = new Vector3(moveDir.x * speed * dashFinal, rb.linearVelocity.y, moveDir.y * speed * dashFinal);
-
-        Plane plane = new Plane(Vector3.up, Vector3.zero);
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        plane.Raycast(ray, out var place);
         
-        Vector3 targetVector = ray.GetPoint(place);
-        rb.transform.LookAt(new Vector3(targetVector.x, rb.transform.position.y, targetVector.z));
 
     }
 }

@@ -9,7 +9,7 @@
                     "name": "Move",
                     "type": "Value",
                     "id": "c579abe7-4f39-4a7b-ae7d-ce47ecc53a06",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -18,7 +18,7 @@
                     "name": "DashHold",
                     "type": "Button",
                     "id": "c8f6c5bf-3f75-46e5-bb9a-7fd9e7b0c7bf",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "Hold",
                     "initialStateCheck": false
@@ -27,7 +27,7 @@
                     "name": "DashPress",
                     "type": "Button",
                     "id": "ad5cfede-3ccb-4e19-9fb9-7924faf0d89b",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -36,7 +36,7 @@
                     "name": "Skill F",
                     "type": "Button",
                     "id": "0f040d79-3452-4266-b82c-12fb75cffbc3",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -54,7 +54,7 @@
                     "name": "Skill E",
                     "type": "Button",
                     "id": "a6a951bc-5801-482e-b1f7-81c6ab78afeb",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -63,7 +63,16 @@
                     "name": "Skill R",
                     "type": "Button",
                     "id": "1c0dafae-f252-48af-850b-86bd63735a5b",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "InventoryButton",
+                    "type": "Button",
+                    "id": "e2cdb422-aaa0-438f-9488-0c423f056fca",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -188,6 +197,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Skill R",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ff3c9542-da7a-4ca6-a6d9-63d788b90049",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InventoryButton",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

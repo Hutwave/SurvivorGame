@@ -92,22 +92,34 @@ public class GameLogic : MonoBehaviour
         updateUI();
     }
 
+
+    public void loadPlayer()
+    {
+        
+    }
     public void updateUI()
     {
         var jotaki = inventory.transform.childCount;
         var mesoDisplay = inventory.transform.Find("InventoryModal").Find("CurrencyBar").Find("MesoPanel").Find("MesoValue");
         var mesoText = mesoDisplay.gameObject.GetComponent<TextMeshProUGUI>();
         mesoText.text = playerMeso.ToString();
-            }
+    }
     public void cantDie()
     {
         canDie = false;
     }
 
-    public void toggleEquip()
+    public void toggleWindow(WindowType winType)
     {
-        equt.SetActive(!equt.activeSelf);
-        itemit.SetActive(!equt.activeSelf);
+        switch (winType)
+        {
+            case WindowType.Equipment:
+                equt.SetActive(!equt.activeSelf);
+                break;
+            case WindowType.Inventory:
+                itemit.SetActive(!itemit.activeSelf);
+                break;
+        }
     }
 
     public bool showShop(ItemShop shop, float range, bool enable)
@@ -327,7 +339,7 @@ public class GameLogic : MonoBehaviour
                 return Instantiate(tempMob);
             }, tempMob =>
             {
-                tempMob.SetActive(false);
+                tempMob.SetActive(true);
             }, tempMob =>
             {
                 tempMob.SetActive(false);
@@ -340,7 +352,6 @@ public class GameLogic : MonoBehaviour
     }
     void spawnEnemy(VictoriaMobNames poolKey)
     {
-        return;
         GameObject mob = enemyPools[poolKey].Get();
         var enemyStatObject = mob.GetComponent<EnemyStats>();
         enemyStatObject.returnToPoolAction(killAction);
@@ -377,9 +388,9 @@ public class GameLogic : MonoBehaviour
 
     public Vector3 RandomizeLocation(int min, int max, float distanceMin, out float randomized)
     {
-        GameObject safePlace = GameObject.Find("SafeSphere");
+        GameObject safePlace = FindAnyObjectByType<PlayerMove>().gameObject;
 
-        Vector3 startPlace = new Vector3(startPlaceObject.transform.position.x, 0.5f, startPlaceObject.transform.position.z);
+        Vector3 startPlace = new Vector3(safePlace.transform.position.x, 0.5f, safePlace.transform.position.z);
         float direction1 = Random.Range(-1f, 1f);
         float direction2 = Random.Range(-1f, 1f);
         Vector3 vector = new Vector3(direction1, 0, direction2);
