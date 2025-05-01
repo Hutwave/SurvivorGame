@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class PlayerMove : MonoBehaviour
@@ -20,12 +19,6 @@ public class PlayerMove : MonoBehaviour
     private Skill Skill2;
     private Skill Skill3;
     private Skill Skill4;
-
-    public Vector3 Cam1;
-    public Vector3 Cam2;
-    public Vector3 Cam3;
-    private CinemachineVirtualCamera vcam;
-    private CinemachineTransposer transposer;
 
     private float intDamageMult;
     private float waitForHold;
@@ -44,8 +37,6 @@ public class PlayerMove : MonoBehaviour
 
     void Start()
     {
-        vcam = FindAnyObjectByType<CinemachineVirtualCamera>();
-        transposer = vcam.GetCinemachineComponent<CinemachineTransposer>();
         gameLogic = FindAnyObjectByType<GameLogic>();
         Skill1 = Mage1st.IceStrike();
         Skill2 = Mage1st.ChainLightning();
@@ -55,21 +46,21 @@ public class PlayerMove : MonoBehaviour
     }
 
     // Assign inputs for player
-    public void OnPlayerSkillE()
+    public void OnSkillE()
     {
         useInstantSkill(Skill1 as InstantSkill);
     }
 
-    public void OnPlayerSkillF()
+    public void OnSkillF()
     {
         useProjectileSkill(Skill2 as ProjectileSkill);
     }
 
-    public void OnPlayerSkillR()
+    public void OnSkillR()
     {
         useArcSkill(Skill3 as ArcSkill);
     }
-    public void OnPlayerSkillG()
+    public void OnSkillG()
     {
         useProjectileSkill(Skill4 as ProjectileSkill);
     }
@@ -122,8 +113,6 @@ public class PlayerMove : MonoBehaviour
                     var wepPoint = transform.Find("Arm").Find("WeaponPoint");
                     temppi.transform.SetParent(wepPoint);
                     temppi.transform.SetPositionAndRotation(wepPoint.position, wepPoint.rotation);
-                    //temppi.transform.position=transform.Find("Arm").Find("WeaponPoint").position;
-                    //temppi.transform.rotation = transform.Find("Arm").Find("WeaponPoint").rotation;
                     return;
                 }
             case ItemType.Hat:
@@ -252,8 +241,6 @@ public class PlayerMove : MonoBehaviour
         return target;
     }
 
-   
-
     private void useArcSkill(ArcSkill arcSkill)
     {
         if (!gameLogic.useSkill(arcSkill.name)) return;
@@ -300,7 +287,6 @@ public class PlayerMove : MonoBehaviour
             targetVector = ray.GetPoint(place);
         }
 
-
         if (po.projectileType == ProjectileType.Chain)
         {
             target = getClosestTarget(targetVector);
@@ -327,8 +313,6 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
-
-
         po.damage = Mathf.RoundToInt(po.baseDamage * intDamageMult);
         GameObject bulletToShoot = Instantiate(po.projectileGameObject, gameObject.transform.position, gameObject.transform.rotation);
         ProjectileBasic projectileStats = bulletToShoot.GetComponent<ProjectileBasic>();
@@ -344,23 +328,8 @@ public class PlayerMove : MonoBehaviour
         else projectileStats.Seek(target.transform);
     }
 
-   
-
     private void Update()
     {
-        if (Input.GetKeyDown("7"))
-        {
-            transposer.m_FollowOffset = Cam1;
-        }
-        if (Input.GetKeyDown("8"))
-        {
-            transposer.m_FollowOffset = Cam2;
-        }
-        if (Input.GetKeyDown("9"))
-        {
-            transposer.m_FollowOffset = Cam3;
-        }
-
         moveDir = playerControls.ReadValue<Vector2>();
         float dashFinal = dash > 1f ? dash : 1f;
         rb.linearVelocity = new Vector3(moveDir.x * speed * dashFinal, rb.linearVelocity.y, moveDir.y * speed * dashFinal);

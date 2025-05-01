@@ -20,7 +20,7 @@ public class ItemShop : MonoBehaviour
         weaponShopLogic = weaponShop.transform.GetComponent<WeaponShopLogic>();
         weaponShopLogic.setHandler(this);
         createShop();
-        var everySecond = 60f;
+        everySecond = 60f;
     }
 
     // Update is called once per frame
@@ -39,7 +39,6 @@ public class ItemShop : MonoBehaviour
                     {
                         this.weaponShop.SetActive(true);
                     }
-                    Debug.LogWarning("A");
                     playerFound = true;
 
                 }

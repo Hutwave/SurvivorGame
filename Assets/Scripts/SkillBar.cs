@@ -36,7 +36,7 @@ public class SkillBar : MonoBehaviour
     {
         foreach (Skill skill in skillList)
         {
-            cdElements.First(x => x.name == skill.name).GetChild(0).GetComponent<Image>().fillAmount = skill.currentCooldown / skill.coolDown;
+            cdElements.First(x => x.name == skill.name).GetComponent<Image>().fillAmount = skill.currentCooldown / skill.coolDown;
         }
     }
 }

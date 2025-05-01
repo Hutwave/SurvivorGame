@@ -1,8 +1,6 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
-
-[CreateAssetMenu(fileName = "PlayerSave", menuName = "Scriptable Objects/PlayerSave")]
 public class PlayerSave : ScriptableObject
 {
     PlayerClass Class;

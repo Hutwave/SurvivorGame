@@ -22,14 +22,13 @@ public class Inventory : MonoBehaviour
         }
         foreach(Item slot in items)
         {
-            var aa = Instantiate(invSlot);
-            aa.name = slot.itemName;
-            aa.transform.SetParent(invSlotPanel.transform);
-            aa.transform.GetChild(0).GetComponent<Image>().sprite = slot.img;
-            aa.transform.GetComponentInChildren<Button>().onClick.AddListener(() => clickItem(slot));
+            var inventorySlot = Instantiate(invSlot);
+            inventorySlot.name = slot.itemName;
+            inventorySlot.transform.SetParent(invSlotPanel.transform);
+            inventorySlot.transform.GetChild(0).GetComponent<Image>().sprite = slot.img;
+            inventorySlot.transform.GetComponentInChildren<Button>().onClick.AddListener(() => clickItem(slot));
         }
     }
-
 
     public void clickItem(Item item)
     {

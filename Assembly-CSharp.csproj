@@ -73,6 +73,7 @@
     <Compile Include="Assets\Scripts\ExpBar.cs" />
     <Compile Include="Assets\Scripts\ProjectileObject.cs" />
     <Compile Include="Assets\Scripts\TreeLogic.cs" />
+    <Compile Include="Assets\Scripts\Teleport.cs" />
     <Compile Include="Assets\Scripts\ExplosionCheck.cs" />
     <Compile Include="Assets\Scripts\SavedData\MageSkills.cs" />
     <Compile Include="Assets\Scripts\Skill.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="Assets\Equips.cs" />
     <Compile Include="Assets\Scripts\HealthBar.cs" />
     <Compile Include="Assets\Skills\Mage1st.cs" />
+    <Compile Include="Assets\Scripts\LevelLogic.cs" />
     <Compile Include="Assets\Scripts\goalTrigger.cs" />
     <Compile Include="Assets\Scripts\ItemConfig.cs" />
     <Compile Include="Assets\Scripts\Inventory.cs" />

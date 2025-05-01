@@ -29,7 +29,6 @@ public class Equips : MonoBehaviour
     {
         gameLogic = FindAnyObjectByType<GameLogic>();
         weaponPanel = this.gameObject.transform.Find("EquipmentModal").Find("WeaponBar").Find("WeaponPanel").gameObject;
-        //var aa = this.gameObject.transform.Find("WeaponBar").Find("WeaponPanel");
     }
 
     public void updateItems(List<Item> items)

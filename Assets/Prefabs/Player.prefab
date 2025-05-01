@@ -541,11 +541,6 @@ MonoBehaviour:
   ps: {fileID: 4874305311884269352}
   rb: {fileID: 81722018}
   player: {fileID: 5163212192447472499}
-  energyBolt: {fileID: 3484992894819570639, guid: aa7fde704bd215642a81e7cdb0fa4c99,
-    type: 3}
-  Cam1: {x: 0, y: 0, z: 0}
-  Cam2: {x: 0, y: 0, z: 0}
-  Cam3: {x: 0, y: 0, z: 0}
 --- !u!114 &471500602935424898
 MonoBehaviour:
   m_ObjectHideFlags: 0

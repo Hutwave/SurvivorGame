@@ -1,0 +1,105 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &9131365063735304830
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 914907152673807086}
+  - component: {fileID: 727803519527941982}
+  - component: {fileID: 8694673330749672386}
+  m_Layer: 0
+  m_Name: RNG Gen
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &914907152673807086
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9131365063735304830}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &727803519527941982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9131365063735304830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e04df6c8713160a4496f67086398c0aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  expCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0.6848966
+      outSlope: 0.6848966
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.10074227
+    - serializedVersion: 3
+      time: 7.032973
+      value: 8.054576
+      inSlope: 1.5778079
+      outSlope: 4.1050143
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0.07669887
+      outWeight: 0.1377783
+    - serializedVersion: 3
+      time: 10.003152
+      value: 17.021444
+      inSlope: 4.9060397
+      outSlope: 4.9060397
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.13410518
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  maxHealth: 100
+  currentHealth: 0
+  startPlaceObject: {fileID: 0}
+  meteorFlying: {fileID: 5123290748934386972, guid: d91441305f207044c947c76e13939d22,
+    type: 3}
+  playerObject: {fileID: 5163212192447472499, guid: 763c166933edd724295e3b9cb62dbeec,
+    type: 3}
+  tree1: {fileID: 8546043812325456821, guid: 9dbc82bea45d4b549811127c9a77c772, type: 3}
+  equipUI: {fileID: 2557256159719630262, guid: f61b29df42dd24a4f966c8688591b69b, type: 3}
+  invUI: {fileID: 2557256159719630262, guid: 6b6708b34fb9d7b4d8124eba13a8320d, type: 3}
+  BottomUI: {fileID: 8156636631279148471, guid: 31a271f4a6d1d97419a3c1165604efe0,
+    type: 3}
+  kauppa: {fileID: 0}
+--- !u!114 &8694673330749672386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9131365063735304830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c98bcbda2716d224cad6e627d699389a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

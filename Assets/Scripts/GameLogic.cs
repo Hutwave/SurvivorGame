@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.Pool;
 
 public class GameLogic : MonoBehaviour
@@ -48,6 +47,7 @@ public class GameLogic : MonoBehaviour
     // UI
     public GameObject equipUI;
     public GameObject invUI;
+    public GameObject BottomUI;
     private ExpBar expBar;
     private HealthBar healthBar;
     private SkillBar skillBar;
@@ -61,16 +61,15 @@ public class GameLogic : MonoBehaviour
 
     private List<Item> playerItems;
     private List<Item> equippedItems;
-    ItemConfig testWand;
-    ItemConfig testWond;
     public GameObject kauppa;
     void Start()
     {
+        var ui = Instantiate(BottomUI);
+        ui.transform.SetParent(this.transform, true);
+
         playerItems = new List<Item>();
         equippedItems = new List<Item>();
         itemIdInc++;
-        testWand = Addressables.LoadAssetAsync<ItemConfig>("Assets/Items/Item2.asset").WaitForCompletion();
-        testWond = Addressables.LoadAssetAsync<ItemConfig>("Assets/Items/Item2.asset").WaitForCompletion();
 
         treeFolder = new GameObject("GeneratedTrees");
         expBar = FindAnyObjectByType<ExpBar>();
@@ -198,8 +197,6 @@ public class GameLogic : MonoBehaviour
         if (tempSkill.currentCooldown > 0.01f)
         {
             itemIdInc++;
-            playerItems.Add(testWand.getItem());
-            playerItems.Add(testWond.getItem());
             itemit.GetComponent<Inventory>().updateItems(playerItems);
             return false;
         }
@@ -209,7 +206,7 @@ public class GameLogic : MonoBehaviour
     public void initializeThings()
     {
         // Initialize map
-        placeTrees();
+        //placeTrees();
         refreshEnemyPools();
 
         // Player stats
