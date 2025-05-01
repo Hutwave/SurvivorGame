@@ -162,6 +162,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EquipButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""4f50f3d0-62a8-4a9a-be12-e58a338a58ba"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -296,6 +305,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""InventoryButton"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""144b76fd-21b0-4dde-a877-6fa85af19d73"",
+                    ""path"": ""<Keyboard>/u"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EquipButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -312,6 +332,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_SkillE = m_Player.FindAction("Skill E", throwIfNotFound: true);
         m_Player_SkillR = m_Player.FindAction("Skill R", throwIfNotFound: true);
         m_Player_InventoryButton = m_Player.FindAction("InventoryButton", throwIfNotFound: true);
+        m_Player_EquipButton = m_Player.FindAction("EquipButton", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -400,6 +421,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_SkillE;
     private readonly InputAction m_Player_SkillR;
     private readonly InputAction m_Player_InventoryButton;
+    private readonly InputAction m_Player_EquipButton;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -443,6 +465,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/InventoryButton".
         /// </summary>
         public InputAction @InventoryButton => m_Wrapper.m_Player_InventoryButton;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/EquipButton".
+        /// </summary>
+        public InputAction @EquipButton => m_Wrapper.m_Player_EquipButton;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -493,6 +519,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @InventoryButton.started += instance.OnInventoryButton;
             @InventoryButton.performed += instance.OnInventoryButton;
             @InventoryButton.canceled += instance.OnInventoryButton;
+            @EquipButton.started += instance.OnEquipButton;
+            @EquipButton.performed += instance.OnEquipButton;
+            @EquipButton.canceled += instance.OnEquipButton;
         }
 
         /// <summary>
@@ -528,6 +557,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @InventoryButton.started -= instance.OnInventoryButton;
             @InventoryButton.performed -= instance.OnInventoryButton;
             @InventoryButton.canceled -= instance.OnInventoryButton;
+            @EquipButton.started -= instance.OnEquipButton;
+            @EquipButton.performed -= instance.OnEquipButton;
+            @EquipButton.canceled -= instance.OnEquipButton;
         }
 
         /// <summary>
@@ -624,5 +656,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnInventoryButton(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "EquipButton" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnEquipButton(InputAction.CallbackContext context);
     }
 }

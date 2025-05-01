@@ -64,7 +64,6 @@ public class PlayerMove : MonoBehaviour
     {
         useProjectileSkill(Skill4 as ProjectileSkill);
     }
-
     public void OnInventoryButton()
     {
         gameLogic.toggleWindow(WindowType.Inventory);
@@ -181,7 +180,6 @@ public class PlayerMove : MonoBehaviour
                     Destroy(this);
                 }
         }
-
         return target;
     }
 
@@ -342,7 +340,6 @@ public class PlayerMove : MonoBehaviour
         rb.transform.LookAt(new Vector3(targetVector.x, rb.transform.position.y, targetVector.z));
 
         // Check for dash cooldown effect
-
         if (dashCd > -0.1f)
         {
             dashCd -= (1 * Time.deltaTime);
@@ -362,9 +359,5 @@ public class PlayerMove : MonoBehaviour
         {
             dash -= (1 * Time.deltaTime);
         }
-
-        // Movement
-        
-
     }
 }

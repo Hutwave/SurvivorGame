@@ -13,22 +13,21 @@ public class LevelLogic : MonoBehaviour
     List<Teleport> teleports = new List<Teleport>();
     Dictionary<string, AsyncOperation> teleportOperations = new Dictionary<string, AsyncOperation>();
     Awaitable awaa;
-    string teleportto;
 
     private void Start()
     {
         SceneManager.sceneLoaded += OnActiveSceneChanged;
-        SceneManager.sceneUnloaded += paska;
+        SceneManager.sceneUnloaded += SceneUnloaded;
 
-        aaStart();
+        NewTeleports();
     }
 
-    void paska(Scene scenee)
+    void SceneUnloaded(Scene scenee)
     {
         teleportOperations.Remove(scenee.name);
-        aaStart();
+        NewTeleports();
     }
-    void aaStart()
+    void NewTeleports()
     {
         teleports = FindObjectsByType<Teleport>(FindObjectsSortMode.None).ToList();
         currentScene = SceneManager.GetActiveScene();
@@ -50,9 +49,6 @@ public class LevelLogic : MonoBehaviour
         teleportOperations.TryGetValue(teleportTo, out AsyncOperation operation);
         if(!operation.allowSceneActivation)
         operation.allowSceneActivation = true;
-
-        //waitForUnload(operation, teleportTo);
-
     }
 
     public void OnActiveSceneChanged(Scene teleportScene, LoadSceneMode loadSceneMode)
@@ -60,44 +56,11 @@ public class LevelLogic : MonoBehaviour
         var playerObj = FindAnyObjectByType<PlayerMove>().gameObject;
         SceneManager.MoveGameObjectToScene(playerObj, teleportScene);
         SceneManager.MoveGameObjectToScene(FindAnyObjectByType<GameLogic>().gameObject, teleportScene);
-        SceneManager.MoveGameObjectToScene(FindAnyObjectByType<CustomSSHHandler>().gameObject, teleportScene);
         var teles = FindObjectsByType<Teleport>(FindObjectsSortMode.None);
         var location = teles.First(oneTele => oneTele.getName() == teleportScene.name).getPlace();
         location.y += 4; 
         playerObj.transform.position = location;
         currentScene = SceneManager.GetActiveScene();
-        //teleportOperations.Remove(teleportTo);
         SceneManager.UnloadSceneAsync(currentScene);
-
-
-
-        Debug.Log("Unloaded");
-    }
-    
-    async void waitForUnload(AsyncOperation operation, string teleportTo)
-    {
-        //await SceneManager.activeSceneChanged(SceneManager.GetActiveScene());
-        var teleportScene = SceneManager.GetSceneByName(teleportTo);
-        var playerObj = FindAnyObjectByType<PlayerMove>().gameObject;
-        SceneManager.MoveGameObjectToScene(playerObj, teleportScene);
-        SceneManager.MoveGameObjectToScene(FindAnyObjectByType<GameLogic>().gameObject, teleportScene);
-        SceneManager.MoveGameObjectToScene(FindAnyObjectByType<CustomSSHHandler>().gameObject, teleportScene);
-        var teles = FindObjectsByType<Teleport>(FindObjectsSortMode.None);
-        var location = teles.First(oneTele => oneTele.getName() == teleportTo).transform.position;
-        location.x += 4;
-        location.y += 4;
-        playerObj.transform.position = location;
-        teleportOperations.Remove(teleportTo);
-        currentScene = SceneManager.GetActiveScene();
-        await SceneManager.UnloadSceneAsync(currentScene);
-
-        
-
-        Debug.Log("Unloaded");
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        //SceneManager.UnloadSceneAsync(TeleportFrom).GetAwaiter();
     }
 }

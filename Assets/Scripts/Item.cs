@@ -9,8 +9,11 @@ public enum ItemType{
     Shoe,
     Glove
 }
-
-
+public enum WindowType
+{
+    Inventory,
+    Equipment
+}
 public class Item
 {
     public string itemName;

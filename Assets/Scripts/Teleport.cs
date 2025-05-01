@@ -1,9 +1,5 @@
-using System.Linq;
-using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static UnityEngine.Rendering.HDROutputUtils;
 
 public class Teleport : MonoBehaviour
 {
@@ -15,7 +11,6 @@ public class Teleport : MonoBehaviour
     private Scene current;
     AsyncOperation operation;
     LevelLogic levelLogic;
-
 
     public string getName()
     {
@@ -30,12 +25,9 @@ public class Teleport : MonoBehaviour
         return TeleportPlace.transform.position;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         levelLogic = FindAnyObjectByType<LevelLogic>();
-
-        //SceneManager.LoadSceneAsync()
     }
 
     private void OnTriggerEnter(Collider other)
